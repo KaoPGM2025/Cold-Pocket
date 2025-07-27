@@ -77,6 +77,20 @@
         .modal {
             transition: opacity 0.3s ease;
         }
+        .delete-btn {
+            opacity: 0.7;
+            transition: all 0.2s ease;
+        }
+        .delete-btn:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        .history-item {
+            transition: all 0.3s ease;
+        }
+        .history-item:hover .delete-btn {
+            opacity: 1;
+        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -371,14 +385,14 @@
     <!-- Delete Confirmation Modal -->
     <div id="delete-modal" class="modal fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
         <div class="bg-white rounded-2xl p-6 max-w-md w-full mx-4">
-            <h2 class="text-xl font-bold text-pink-600 mb-4">ยืนยันการลบเป้าหมาย</h2>
-            <p class="mb-6 text-gray-700">คุณต้องการลบเป้าหมายนี้ใช่หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้</p>
+            <h2 class="text-xl font-bold text-pink-600 mb-4">ยืนยันการลบ</h2>
+            <p id="delete-confirmation-message" class="mb-6 text-gray-700">คุณต้องการลบรายการนี้ใช่หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้</p>
             <div class="flex justify-end space-x-2">
                 <button id="delete-cancel-button" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg transition duration-300">
                     ยกเลิก
                 </button>
                 <button id="delete-confirm-button" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
-                    ลบเป้าหมาย
+                    ลบ
                 </button>
             </div>
         </div>
@@ -422,6 +436,7 @@
         const goalCancelButton = document.getElementById('goal-cancel-button');
         const goalSaveButton = document.getElementById('goal-save-button');
         const deleteModal = document.getElementById('delete-modal');
+        const deleteConfirmationMessage = document.getElementById('delete-confirmation-message');
         const deleteCancelButton = document.getElementById('delete-cancel-button');
         const deleteConfirmButton = document.getElementById('delete-confirm-button');
         const successToast = document.getElementById('success-toast');
@@ -461,6 +476,11 @@
                 bar: document.getElementById('other-bar')
             }
         };
+        
+        // Variables for delete functionality
+        let deletingGoalId = null;
+        let deletingSavingId = null;
+        let deleteType = null; // 'goal' or 'saving'
         
         // Tab switching
         tabButtons.forEach(button => {
@@ -531,7 +551,6 @@
         
         // Goal modal events
         let editingGoalId = null;
-        let deletingGoalId = null;
         
         createGoalButton.addEventListener('click', () => openGoalModal());
         
@@ -545,6 +564,8 @@
         deleteActiveGoalButton.addEventListener('click', () => {
             if (activeGoalId) {
                 deletingGoalId = activeGoalId;
+                deleteType = 'goal';
+                deleteConfirmationMessage.textContent = 'คุณต้องการลบเป้าหมายนี้ใช่หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้';
                 openDeleteModal();
             }
         });
@@ -609,7 +630,7 @@
         deleteCancelButton.addEventListener('click', closeDeleteModal);
         
         deleteConfirmButton.addEventListener('click', () => {
-            if (deletingGoalId) {
+            if (deleteType === 'goal' && deletingGoalId) {
                 const index = goals.findIndex(g => g.id === deletingGoalId);
                 if (index !== -1) {
                     goals.splice(index, 1);
@@ -624,6 +645,21 @@
                     updateGoalProgress();
                     updateGoalsList();
                     showToast('ลบเป้าหมายสำเร็จ');
+                }
+            } else if (deleteType === 'saving' && deletingSavingId) {
+                const index = savings.findIndex(s => s.id === deletingSavingId);
+                if (index !== -1) {
+                    savings.splice(index, 1);
+                    localStorage.setItem('coldPocketSavings', JSON.stringify(savings));
+                    
+                    // Update all related UI
+                    updateTotalSavings();
+                    updateRecentSavings();
+                    updateHistoryList();
+                    updateCategoryStats();
+                    updateGoalProgress();
+                    
+                    showToast('ลบรายการออมเงินสำเร็จ');
                 }
             }
             closeDeleteModal();
@@ -721,16 +757,35 @@
                 const formattedTime = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
                 
                 const itemElement = document.createElement('div');
-                itemElement.className = 'flex justify-between items-center p-3 border-b border-pink-100 last:border-0';
+                itemElement.className = 'history-item flex justify-between items-center p-3 border-b border-pink-100 last:border-0';
                 itemElement.innerHTML = `
                     <div>
                         <div class="font-medium text-pink-600">${item.category}</div>
                         <div class="text-sm text-gray-500">${formattedDate} ${formattedTime}</div>
                         ${item.note ? `<div class="text-sm text-gray-600">${item.note}</div>` : ''}
                     </div>
-                    <div class="font-bold text-pink-700">฿${formatNumber(item.amount)}</div>
+                    <div class="flex items-center">
+                        <div class="font-bold text-pink-700 mr-3">฿${formatNumber(item.amount)}</div>
+                        <button class="delete-btn bg-red-400 hover:bg-red-500 text-white p-1 rounded-full transition duration-300" data-id="${item.id}">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                            </svg>
+                        </button>
+                    </div>
                 `;
                 historyListElement.appendChild(itemElement);
+            });
+            
+            // Add event listeners to delete buttons
+            document.querySelectorAll('.delete-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const savingId = parseInt(button.getAttribute('data-id'));
+                    deletingSavingId = savingId;
+                    deleteType = 'saving';
+                    deleteConfirmationMessage.textContent = 'คุณต้องการลบรายการออมเงินนี้ใช่หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้';
+                    openDeleteModal();
+                });
             });
         }
         
@@ -880,6 +935,8 @@
                 button.addEventListener('click', () => {
                     const goalId = button.getAttribute('data-id');
                     deletingGoalId = goalId;
+                    deleteType = 'goal';
+                    deleteConfirmationMessage.textContent = 'คุณต้องการลบเป้าหมายนี้ใช่หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้';
                     openDeleteModal();
                 });
             });
@@ -914,6 +971,8 @@
         function closeDeleteModal() {
             deleteModal.classList.add('hidden');
             deletingGoalId = null;
+            deletingSavingId = null;
+            deleteType = null;
         }
         
         function showToast(message, type = 'success') {
@@ -976,5 +1035,5 @@
             }
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'965b85ea95577331',t:'MTc1MzYxMjg3My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'965b9e91c46f4f58',t:'MTc1MzYxMzg4My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
