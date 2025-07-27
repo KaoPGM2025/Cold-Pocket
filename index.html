@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cold Pocket - ออมเงินแบบประหยัด</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Prompt', sans-serif;
+            background-color: #FFEFD5;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23FFB6C1' fill-opacity='0.2' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+        .piggy-bank {
+            filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.1));
+            transition: transform 0.3s ease;
+        }
+        .piggy-bank:hover {
+            transform: scale(1.05);
+        }
+        .coin-animation {
+            animation: coinDrop 1s forwards;
+            position: absolute;
+        }
+        @keyframes coinDrop {
+            0% {
+                transform: translateY(-50px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        .category-icon {
+            transition: all 0.3s ease;
+        }
+        .category-icon:hover {
+            transform: scale(1.1);
+        }
+        .progress-tube {
+            position: relative;
+            height: 200px;
+            width: 60px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 30px;
+            overflow: hidden;
+            border: 3px solid #FF9999;
+        }
+        .progress-fill {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: linear-gradient(to top, #FF9999, #FFCCCC);
+            border-radius: 0 0 30px 30px;
+            transition: height 0.5s ease-in-out;
+        }
+        .tab-button {
+            transition: all 0.2s ease;
+        }
+        .tab-button:hover {
+            transform: translateY(-2px);
+        }
+        .tab-button.active {
+            background-color: #FF9999;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .category-card {
+            transition: all 0.3s ease;
+        }
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        .modal {
+            transition: opacity 0.3s ease;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Header -->
+        <header class="flex justify-between items-center mb-8">
+            <div class="flex items-center">
+                <svg class="piggy-bank w-16 h-16 mr-3" viewBox="0 0 512 512" fill="#FF9999">
+                    <path d="M422,108h-32c-4.4,0-8,3.6-8,8s3.6,8,8,8h32c4.4,0,8-3.6,8-8S426.4,108,422,108z"/>
+                    <path d="M78,280c-4.4,0-8,3.6-8,8v32c0,4.4,3.6,8,8,8s8-3.6,8-8v-32C86,283.6,82.4,280,78,280z"/>
+                    <path d="M430.4,280.5c-0.2-0.2-0.4-0.3-0.6-0.5H408c-4.4,0-8,3.6-8,8s3.6,8,8,8h8c0,13.2-2.1,25.9-6,37.8l-31.8-5.6
+                        c-4.3-0.8-8.4,2.1-9.1,6.4c-0.8,4.3,2.1,8.4,6.4,9.1l24.2,4.3c-12.7,29.8-36.1,55.3-65.9,71.3c-9.8-14.7-26.6-24.4-45.7-24.4h-80
+                        c-19.1,0-35.9,9.7-45.7,24.4c-29.8-16-53.2-41.5-65.9-71.3l24.2-4.3c4.3-0.8,7.1-4.8,6.4-9.1c-0.8-4.3-4.8-7.1-9.1-6.4l-31.8,5.6
+                        c-3.9-11.9-6-24.6-6-37.8h168c4.4,0,8-3.6,8-8s-3.6-8-8-8H78c-0.2,0.2-0.4,0.3-0.6,0.5C77.3,280.3,77.1,280.2,77,280
+                        c-0.3-0.3-0.5-0.5-0.8-0.7c-0.3-0.2-0.5-0.4-0.8-0.6c-0.3-0.2-0.6-0.3-0.9-0.4c-0.3-0.1-0.6-0.3-0.9-0.4c-0.3-0.1-0.6-0.2-0.9-0.2
+                        c-0.3-0.1-0.6-0.1-0.9-0.1c-0.3,0-0.6-0.1-0.9-0.1c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0.1-0.9,0.1c-0.3,0-0.6,0.1-0.9,0.1
+                        c-0.3,0.1-0.6,0.2-0.9,0.2c-0.3,0.1-0.6,0.2-0.9,0.4c-0.3,0.1-0.6,0.3-0.9,0.4c-0.3,0.2-0.6,0.3-0.8,0.6c-0.3,0.2-0.5,0.4-0.8,0.7
+                        c-0.1,0.1-0.3,0.2-0.4,0.3c-0.2,0.2-0.3,0.4-0.5,0.6V264c0-92.6,75.4-168,168-168c92.6,0,168,75.4,168,168v16.8
+                        c-0.2-0.2-0.3-0.4-0.5-0.6C430.7,280.1,430.5,280.3,430.4,280.5z"/>
+                    <path d="M286,368h-60c-4.4,0-8,3.6-8,8s3.6,8,8,8h60c4.4,0,8-3.6,8-8S290.4,368,286,368z"/>
+                    <path d="M286,336h-60c-4.4,0-8,3.6-8,8s3.6,8,8,8h60c4.4,0,8-3.6,8-8S290.4,336,286,336z"/>
+                    <path d="M286,304h-60c-4.4,0-8,3.6-8,8s3.6,8,8,8h60c4.4,0,8-3.6,8-8S290.4,304,286,304z"/>
+                    <path d="M286,272h-60c-4.4,0-8,3.6-8,8s3.6,8,8,8h60c4.4,0,8-3.6,8-8S290.4,272,286,272z"/>
+                    <path d="M286,240h-60c-4.4,0-8,3.6-8,8s3.6,8,8,8h60c4.4,0,8-3.6,8-8S290.4,240,286,240z"/>
+                    <path d="M286,208h-60c-4.4,0-8,3.6-8,8s3.6,8,8,8h60c4.4,0,8-3.6,8-8S290.4,208,286,208z"/>
+                    <path d="M286,176h-60c-4.4,0-8,3.6-8,8s3.6,8,8,8h60c4.4,0,8-3.6,8-8S290.4,176,286,176z"/>
+                </svg>
+                <div>
+                    <h1 class="text-3xl font-bold text-pink-600">Cold Pocket</h1>
+                    <p class="text-pink-500">ออมเงินแบบประหยัด ทันสมัย</p>
+                </div>
+            </div>
+            <div class="text-right">
+                <p class="text-lg font-bold text-pink-600">ยอดเงินออมทั้งหมด</p>
+                <p id="total-savings" class="text-2xl font-bold text-pink-700">฿0</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Tabs -->
+            <div class="flex mb-6 bg-white rounded-full p-1 shadow-md">
+                <button id="tab-home" class="tab-button active flex-1 py-2 px-4 rounded-full text-center font-medium">หน้าหลัก</button>
+                <button id="tab-history" class="tab-button flex-1 py-2 px-4 rounded-full text-center font-medium">ประวัติการออม</button>
+                <button id="tab-categories" class="tab-button flex-1 py-2 px-4 rounded-full text-center font-medium">หมวดหมู่</button>
+                <button id="tab-goals" class="tab-button flex-1 py-2 px-4 rounded-full text-center font-medium">เป้าหมาย</button>
+            </div>
+
+            <!-- Home Tab -->
+            <div id="home-content" class="tab-content bg-white rounded-2xl p-6 shadow-lg">
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="flex-1">
+                        <h2 class="text-xl font-bold text-pink-600 mb-4">เพิ่มการออมเงิน</h2>
+                        <div class="bg-pink-50 rounded-xl p-4 mb-4">
+                            <div class="mb-4">
+                                <label class="block text-pink-700 mb-2">จำนวนเงิน (บาท)</label>
+                                <input id="amount-input" type="number" class="w-full px-4 py-2 rounded-lg border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-500" placeholder="0.00">
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-pink-700 mb-2">หมวดหมู่</label>
+                                <select id="category-select" class="w-full px-4 py-2 rounded-lg border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-500">
+                                    <option value="อาหาร">อาหาร</option>
+                                    <option value="ช้อปปิ้ง">ช้อปปิ้ง</option>
+                                    <option value="การศึกษา">การศึกษา</option>
+                                    <option value="ท่องเที่ยว">ท่องเที่ยว</option>
+                                    <option value="ฉุกเฉิน">ฉุกเฉิน</option>
+                                    <option value="อื่นๆ">อื่นๆ</option>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-pink-700 mb-2">หมายเหตุ (ไม่บังคับ)</label>
+                                <input id="note-input" type="text" class="w-full px-4 py-2 rounded-lg border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-500" placeholder="บันทึกเพิ่มเติม...">
+                            </div>
+                            <button id="save-button" class="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-4 rounded-lg transition duration-300 flex items-center justify-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                </svg>
+                                บันทึกการออม
+                            </button>
+                        </div>
+                        
+                        <div class="bg-pink-50 rounded-xl p-4">
+                            <h3 class="text-lg font-bold text-pink-600 mb-3">การออมล่าสุด</h3>
+                            <div id="recent-savings" class="space-y-3">
+                                <div class="text-center text-gray-500 py-4">ยังไม่มีรายการออมเงิน</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex-1 flex flex-col items-center">
+                        <h2 class="text-xl font-bold text-pink-600 mb-4">เป้าหมายการออม</h2>
+                        <div id="goal-container" class="relative flex flex-col items-center">
+                            <div id="no-goal" class="text-center mb-4">
+                                <p class="text-gray-500 mb-2">ยังไม่มีเป้าหมายการออม</p>
+                                <button id="create-goal-button" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                                    สร้างเป้าหมาย
+                                </button>
+                            </div>
+                            
+                            <div id="active-goal" class="hidden flex flex-col items-center">
+                                <h3 id="goal-name" class="text-lg font-bold text-pink-600 mb-2">เป้าหมาย</h3>
+                                <div class="flex items-end mb-4">
+                                    <div class="progress-tube">
+                                        <div id="progress-fill" class="progress-fill" style="height: 0%"></div>
+                                    </div>
+                                    <div class="ml-4">
+                                        <p class="text-pink-600 font-bold">ความคืบหน้า</p>
+                                        <p id="progress-percent" class="text-2xl font-bold text-pink-700">0%</p>
+                                        <p id="progress-amount" class="text-lg text-pink-600">฿0 / ฿0</p>
+                                    </div>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button id="edit-goal-button" class="bg-pink-400 hover:bg-pink-500 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                                        แก้ไขเป้าหมาย
+                                    </button>
+                                    <button id="delete-active-goal-button" class="bg-red-400 hover:bg-red-500 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                                        ลบเป้าหมาย
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- History Tab -->
+            <div id="history-content" class="tab-content hidden bg-white rounded-2xl p-6 shadow-lg">
+                <h2 class="text-xl font-bold text-pink-600 mb-4">ประวัติการออมเงิน</h2>
+                <div class="mb-4 flex gap-2">
+                    <select id="filter-category" class="px-4 py-2 rounded-lg border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-500">
+                        <option value="all">ทุกหมวดหมู่</option>
+                        <option value="อาหาร">อาหาร</option>
+                        <option value="ช้อปปิ้ง">ช้อปปิ้ง</option>
+                        <option value="การศึกษา">การศึกษา</option>
+                        <option value="ท่องเที่ยว">ท่องเที่ยว</option>
+                        <option value="ฉุกเฉิน">ฉุกเฉิน</option>
+                        <option value="อื่นๆ">อื่นๆ</option>
+                    </select>
+                    <select id="filter-date" class="px-4 py-2 rounded-lg border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-500">
+                        <option value="all">ทุกช่วงเวลา</option>
+                        <option value="today">วันนี้</option>
+                        <option value="week">สัปดาห์นี้</option>
+                        <option value="month">เดือนนี้</option>
+                        <option value="year">ปีนี้</option>
+                    </select>
+                </div>
+                <div class="bg-pink-50 rounded-xl p-4">
+                    <div id="history-list" class="divide-y divide-pink-200">
+                        <div class="text-center text-gray-500 py-4">ยังไม่มีประวัติการออมเงิน</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories Tab -->
+            <div id="categories-content" class="tab-content hidden bg-white rounded-2xl p-6 shadow-lg">
+                <h2 class="text-xl font-bold text-pink-600 mb-4">หมวดหมู่การออม</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="category-card bg-pink-50 rounded-xl p-4 shadow-md">
+                        <div class="flex items-center mb-3">
+                            <div class="category-icon bg-pink-200 p-3 rounded-full mr-3">
+                                <svg class="w-6 h-6 text-pink-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h5a1 1 0 000-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM13 16a1 1 0 102 0v-5.586l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 101.414 1.414L13 10.414V16z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-bold text-pink-600">อาหาร</h3>
+                        </div>
+                        <p id="food-total" class="text-xl font-bold text-pink-700">฿0</p>
+                        <div class="mt-2 bg-white rounded-lg h-2">
+                            <div id="food-bar" class="bg-pink-500 h-2 rounded-lg" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="category-card bg-pink-50 rounded-xl p-4 shadow-md">
+                        <div class="flex items-center mb-3">
+                            <div class="category-icon bg-pink-200 p-3 rounded-full mr-3">
+                                <svg class="w-6 h-6 text-pink-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-bold text-pink-600">ช้อปปิ้ง</h3>
+                        </div>
+                        <p id="shopping-total" class="text-xl font-bold text-pink-700">฿0</p>
+                        <div class="mt-2 bg-white rounded-lg h-2">
+                            <div id="shopping-bar" class="bg-pink-500 h-2 rounded-lg" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="category-card bg-pink-50 rounded-xl p-4 shadow-md">
+                        <div class="flex items-center mb-3">
+                            <div class="category-icon bg-pink-200 p-3 rounded-full mr-3">
+                                <svg class="w-6 h-6 text-pink-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-bold text-pink-600">การศึกษา</h3>
+                        </div>
+                        <p id="education-total" class="text-xl font-bold text-pink-700">฿0</p>
+                        <div class="mt-2 bg-white rounded-lg h-2">
+                            <div id="education-bar" class="bg-pink-500 h-2 rounded-lg" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="category-card bg-pink-50 rounded-xl p-4 shadow-md">
+                        <div class="flex items-center mb-3">
+                            <div class="category-icon bg-pink-200 p-3 rounded-full mr-3">
+                                <svg class="w-6 h-6 text-pink-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-bold text-pink-600">ท่องเที่ยว</h3>
+                        </div>
+                        <p id="travel-total" class="text-xl font-bold text-pink-700">฿0</p>
+                        <div class="mt-2 bg-white rounded-lg h-2">
+                            <div id="travel-bar" class="bg-pink-500 h-2 rounded-lg" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="category-card bg-pink-50 rounded-xl p-4 shadow-md">
+                        <div class="flex items-center mb-3">
+                            <div class="category-icon bg-pink-200 p-3 rounded-full mr-3">
+                                <svg class="w-6 h-6 text-pink-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-bold text-pink-600">ฉุกเฉิน</h3>
+                        </div>
+                        <p id="emergency-total" class="text-xl font-bold text-pink-700">฿0</p>
+                        <div class="mt-2 bg-white rounded-lg h-2">
+                            <div id="emergency-bar" class="bg-pink-500 h-2 rounded-lg" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="category-card bg-pink-50 rounded-xl p-4 shadow-md">
+                        <div class="flex items-center mb-3">
+                            <div class="category-icon bg-pink-200 p-3 rounded-full mr-3">
+                                <svg class="w-6 h-6 text-pink-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-bold text-pink-600">อื่นๆ</h3>
+                        </div>
+                        <p id="other-total" class="text-xl font-bold text-pink-700">฿0</p>
+                        <div class="mt-2 bg-white rounded-lg h-2">
+                            <div id="other-bar" class="bg-pink-500 h-2 rounded-lg" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Goals Tab -->
+            <div id="goals-content" class="tab-content hidden bg-white rounded-2xl p-6 shadow-lg">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold text-pink-600">เป้าหมายการออม</h2>
+                    <button id="add-goal-button" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                        เพิ่มเป้าหมาย
+                    </button>
+                </div>
+                <div id="goals-list" class="space-y-4">
+                    <div class="text-center text-gray-500 py-4">ยังไม่มีเป้าหมายการออม</div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Goal Modal -->
+    <div id="goal-modal" class="modal fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-6 max-w-md w-full mx-4">
+            <h2 id="goal-modal-title" class="text-xl font-bold text-pink-600 mb-4">สร้างเป้าหมายการออม</h2>
+            <div class="mb-4">
+                <label class="block text-pink-700 mb-2">ชื่อเป้าหมาย</label>
+                <input id="goal-name-input" type="text" class="w-full px-4 py-2 rounded-lg border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-500" placeholder="เช่น ซื้อโทรศัพท์ใหม่">
+            </div>
+            <div class="mb-4">
+                <label class="block text-pink-700 mb-2">จำนวนเงินเป้าหมาย (บาท)</label>
+                <input id="goal-amount-input" type="number" class="w-full px-4 py-2 rounded-lg border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-500" placeholder="0.00">
+            </div>
+            <div class="mb-4">
+                <label class="block text-pink-700 mb-2">วันที่ต้องการบรรลุเป้าหมาย (ไม่บังคับ)</label>
+                <input id="goal-date-input" type="date" class="w-full px-4 py-2 rounded-lg border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-500">
+            </div>
+            <div class="flex justify-end space-x-2">
+                <button id="goal-cancel-button" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg transition duration-300">
+                    ยกเลิก
+                </button>
+                <button id="goal-save-button" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                    บันทึก
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-modal" class="modal fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-6 max-w-md w-full mx-4">
+            <h2 class="text-xl font-bold text-pink-600 mb-4">ยืนยันการลบเป้าหมาย</h2>
+            <p class="mb-6 text-gray-700">คุณต้องการลบเป้าหมายนี้ใช่หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้</p>
+            <div class="flex justify-end space-x-2">
+                <button id="delete-cancel-button" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg transition duration-300">
+                    ยกเลิก
+                </button>
+                <button id="delete-confirm-button" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                    ลบเป้าหมาย
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Toast -->
+    <div id="success-toast" class="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 flex items-center">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+        <span id="toast-message">บันทึกข้อมูลสำเร็จ</span>
+    </div>
+
+    <script>
+        // Initialize data from localStorage or set defaults
+        let savings = JSON.parse(localStorage.getItem('coldPocketSavings')) || [];
+        let goals = JSON.parse(localStorage.getItem('coldPocketGoals')) || [];
+        let activeGoalId = localStorage.getItem('coldPocketActiveGoal') || null;
+        
+        // DOM Elements
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const saveButton = document.getElementById('save-button');
+        const amountInput = document.getElementById('amount-input');
+        const categorySelect = document.getElementById('category-select');
+        const noteInput = document.getElementById('note-input');
+        const totalSavingsElement = document.getElementById('total-savings');
+        const recentSavingsElement = document.getElementById('recent-savings');
+        const historyListElement = document.getElementById('history-list');
+        const filterCategoryElement = document.getElementById('filter-category');
+        const filterDateElement = document.getElementById('filter-date');
+        const createGoalButton = document.getElementById('create-goal-button');
+        const editGoalButton = document.getElementById('edit-goal-button');
+        const deleteActiveGoalButton = document.getElementById('delete-active-goal-button');
+        const addGoalButton = document.getElementById('add-goal-button');
+        const goalModal = document.getElementById('goal-modal');
+        const goalModalTitle = document.getElementById('goal-modal-title');
+        const goalNameInput = document.getElementById('goal-name-input');
+        const goalAmountInput = document.getElementById('goal-amount-input');
+        const goalDateInput = document.getElementById('goal-date-input');
+        const goalCancelButton = document.getElementById('goal-cancel-button');
+        const goalSaveButton = document.getElementById('goal-save-button');
+        const deleteModal = document.getElementById('delete-modal');
+        const deleteCancelButton = document.getElementById('delete-cancel-button');
+        const deleteConfirmButton = document.getElementById('delete-confirm-button');
+        const successToast = document.getElementById('success-toast');
+        const toastMessage = document.getElementById('toast-message');
+        const noGoalElement = document.getElementById('no-goal');
+        const activeGoalElement = document.getElementById('active-goal');
+        const goalNameElement = document.getElementById('goal-name');
+        const progressFillElement = document.getElementById('progress-fill');
+        const progressPercentElement = document.getElementById('progress-percent');
+        const progressAmountElement = document.getElementById('progress-amount');
+        const goalsListElement = document.getElementById('goals-list');
+        
+        // Category elements
+        const categoryElements = {
+            'อาหาร': {
+                total: document.getElementById('food-total'),
+                bar: document.getElementById('food-bar')
+            },
+            'ช้อปปิ้ง': {
+                total: document.getElementById('shopping-total'),
+                bar: document.getElementById('shopping-bar')
+            },
+            'การศึกษา': {
+                total: document.getElementById('education-total'),
+                bar: document.getElementById('education-bar')
+            },
+            'ท่องเที่ยว': {
+                total: document.getElementById('travel-total'),
+                bar: document.getElementById('travel-bar')
+            },
+            'ฉุกเฉิน': {
+                total: document.getElementById('emergency-total'),
+                bar: document.getElementById('emergency-bar')
+            },
+            'อื่นๆ': {
+                total: document.getElementById('other-total'),
+                bar: document.getElementById('other-bar')
+            }
+        };
+        
+        // Tab switching
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                const tabId = button.id.replace('tab-', '');
+                tabContents.forEach(content => {
+                    content.classList.add('hidden');
+                });
+                document.getElementById(`${tabId}-content`).classList.remove('hidden');
+                
+                // Update content when switching tabs
+                if (tabId === 'history') {
+                    updateHistoryList();
+                } else if (tabId === 'categories') {
+                    updateCategoryStats();
+                } else if (tabId === 'goals') {
+                    updateGoalsList();
+                }
+            });
+        });
+        
+        // Save new saving
+        saveButton.addEventListener('click', () => {
+            const amount = parseFloat(amountInput.value);
+            if (isNaN(amount) || amount <= 0) {
+                showToast('กรุณาใส่จำนวนเงินที่ถูกต้อง', 'error');
+                return;
+            }
+            
+            const category = categorySelect.value;
+            const note = noteInput.value;
+            const date = new Date();
+            
+            const newSaving = {
+                id: Date.now(),
+                amount,
+                category,
+                note,
+                date: date.toISOString()
+            };
+            
+            savings.unshift(newSaving);
+            localStorage.setItem('coldPocketSavings', JSON.stringify(savings));
+            
+            // Update UI
+            updateTotalSavings();
+            updateRecentSavings();
+            updateCategoryStats();
+            updateGoalProgress();
+            
+            // Clear inputs
+            amountInput.value = '';
+            noteInput.value = '';
+            
+            // Show success message
+            showToast('บันทึกการออมเงินสำเร็จ');
+            
+            // Add coin animation
+            createCoinAnimation();
+        });
+        
+        // Filter history
+        filterCategoryElement.addEventListener('change', updateHistoryList);
+        filterDateElement.addEventListener('change', updateHistoryList);
+        
+        // Goal modal events
+        let editingGoalId = null;
+        let deletingGoalId = null;
+        
+        createGoalButton.addEventListener('click', () => openGoalModal());
+        
+        editGoalButton.addEventListener('click', () => {
+            const goal = goals.find(g => g.id === activeGoalId);
+            if (goal) {
+                openGoalModal(goal);
+            }
+        });
+        
+        deleteActiveGoalButton.addEventListener('click', () => {
+            if (activeGoalId) {
+                deletingGoalId = activeGoalId;
+                openDeleteModal();
+            }
+        });
+        
+        addGoalButton.addEventListener('click', () => openGoalModal());
+        
+        goalCancelButton.addEventListener('click', closeGoalModal);
+        
+        goalSaveButton.addEventListener('click', () => {
+            const name = goalNameInput.value.trim();
+            const amount = parseFloat(goalAmountInput.value);
+            const date = goalDateInput.value;
+            
+            if (!name) {
+                showToast('กรุณาใส่ชื่อเป้าหมาย', 'error');
+                return;
+            }
+            
+            if (isNaN(amount) || amount <= 0) {
+                showToast('กรุณาใส่จำนวนเงินที่ถูกต้อง', 'error');
+                return;
+            }
+            
+            if (editingGoalId) {
+                // Update existing goal
+                const index = goals.findIndex(g => g.id === editingGoalId);
+                if (index !== -1) {
+                    goals[index] = {
+                        ...goals[index],
+                        name,
+                        amount,
+                        targetDate: date || null
+                    };
+                }
+            } else {
+                // Create new goal
+                const newGoal = {
+                    id: Date.now().toString(),
+                    name,
+                    amount,
+                    targetDate: date || null,
+                    createdAt: new Date().toISOString()
+                };
+                goals.push(newGoal);
+                
+                // Set as active if it's the first goal
+                if (!activeGoalId) {
+                    activeGoalId = newGoal.id;
+                    localStorage.setItem('coldPocketActiveGoal', activeGoalId);
+                }
+            }
+            
+            localStorage.setItem('coldPocketGoals', JSON.stringify(goals));
+            
+            closeGoalModal();
+            updateGoalProgress();
+            updateGoalsList();
+            showToast(editingGoalId ? 'แก้ไขเป้าหมายสำเร็จ' : 'สร้างเป้าหมายสำเร็จ');
+        });
+        
+        // Delete confirmation modal events
+        deleteCancelButton.addEventListener('click', closeDeleteModal);
+        
+        deleteConfirmButton.addEventListener('click', () => {
+            if (deletingGoalId) {
+                const index = goals.findIndex(g => g.id === deletingGoalId);
+                if (index !== -1) {
+                    goals.splice(index, 1);
+                    localStorage.setItem('coldPocketGoals', JSON.stringify(goals));
+                    
+                    // If active goal was deleted, set a new active goal or null
+                    if (deletingGoalId === activeGoalId) {
+                        activeGoalId = goals.length > 0 ? goals[0].id : null;
+                        localStorage.setItem('coldPocketActiveGoal', activeGoalId);
+                    }
+                    
+                    updateGoalProgress();
+                    updateGoalsList();
+                    showToast('ลบเป้าหมายสำเร็จ');
+                }
+            }
+            closeDeleteModal();
+        });
+        
+        // Helper functions
+        function updateTotalSavings() {
+            const total = savings.reduce((sum, item) => sum + item.amount, 0);
+            totalSavingsElement.textContent = `฿${formatNumber(total)}`;
+        }
+        
+        function updateRecentSavings() {
+            if (savings.length === 0) {
+                recentSavingsElement.innerHTML = '<div class="text-center text-gray-500 py-4">ยังไม่มีรายการออมเงิน</div>';
+                return;
+            }
+            
+            recentSavingsElement.innerHTML = '';
+            const recentItems = savings.slice(0, 5);
+            
+            recentItems.forEach(item => {
+                const date = new Date(item.date);
+                const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+                
+                const itemElement = document.createElement('div');
+                itemElement.className = 'flex justify-between items-center p-3 bg-white rounded-lg shadow-sm';
+                itemElement.innerHTML = `
+                    <div>
+                        <div class="font-medium text-pink-600">${item.category}</div>
+                        <div class="text-sm text-gray-500">${formattedDate} ${item.note ? '- ' + item.note : ''}</div>
+                    </div>
+                    <div class="font-bold text-pink-700">฿${formatNumber(item.amount)}</div>
+                `;
+                recentSavingsElement.appendChild(itemElement);
+            });
+        }
+        
+        function updateHistoryList() {
+            const categoryFilter = filterCategoryElement.value;
+            const dateFilter = filterDateElement.value;
+            
+            let filteredSavings = [...savings];
+            
+            // Apply category filter
+            if (categoryFilter !== 'all') {
+                filteredSavings = filteredSavings.filter(item => item.category === categoryFilter);
+            }
+            
+            // Apply date filter
+            if (dateFilter !== 'all') {
+                const now = new Date();
+                const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                
+                if (dateFilter === 'today') {
+                    filteredSavings = filteredSavings.filter(item => {
+                        const itemDate = new Date(item.date);
+                        return itemDate >= today;
+                    });
+                } else if (dateFilter === 'week') {
+                    const weekStart = new Date(now);
+                    weekStart.setDate(now.getDate() - now.getDay());
+                    weekStart.setHours(0, 0, 0, 0);
+                    
+                    filteredSavings = filteredSavings.filter(item => {
+                        const itemDate = new Date(item.date);
+                        return itemDate >= weekStart;
+                    });
+                } else if (dateFilter === 'month') {
+                    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+                    
+                    filteredSavings = filteredSavings.filter(item => {
+                        const itemDate = new Date(item.date);
+                        return itemDate >= monthStart;
+                    });
+                } else if (dateFilter === 'year') {
+                    const yearStart = new Date(now.getFullYear(), 0, 1);
+                    
+                    filteredSavings = filteredSavings.filter(item => {
+                        const itemDate = new Date(item.date);
+                        return itemDate >= yearStart;
+                    });
+                }
+            }
+            
+            if (filteredSavings.length === 0) {
+                historyListElement.innerHTML = '<div class="text-center text-gray-500 py-4">ไม่พบรายการออมเงิน</div>';
+                return;
+            }
+            
+            historyListElement.innerHTML = '';
+            
+            filteredSavings.forEach(item => {
+                const date = new Date(item.date);
+                const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+                const formattedTime = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+                
+                const itemElement = document.createElement('div');
+                itemElement.className = 'flex justify-between items-center p-3 border-b border-pink-100 last:border-0';
+                itemElement.innerHTML = `
+                    <div>
+                        <div class="font-medium text-pink-600">${item.category}</div>
+                        <div class="text-sm text-gray-500">${formattedDate} ${formattedTime}</div>
+                        ${item.note ? `<div class="text-sm text-gray-600">${item.note}</div>` : ''}
+                    </div>
+                    <div class="font-bold text-pink-700">฿${formatNumber(item.amount)}</div>
+                `;
+                historyListElement.appendChild(itemElement);
+            });
+        }
+        
+        function updateCategoryStats() {
+            const categorySums = {};
+            const categories = ['อาหาร', 'ช้อปปิ้ง', 'การศึกษา', 'ท่องเที่ยว', 'ฉุกเฉิน', 'อื่นๆ'];
+            
+            // Initialize all categories to 0
+            categories.forEach(category => {
+                categorySums[category] = 0;
+            });
+            
+            // Calculate sums for each category
+            savings.forEach(item => {
+                categorySums[item.category] += item.amount;
+            });
+            
+            // Calculate total
+            const total = Object.values(categorySums).reduce((sum, amount) => sum + amount, 0);
+            
+            // Update UI for each category
+            categories.forEach(category => {
+                const amount = categorySums[category];
+                const percentage = total > 0 ? (amount / total) * 100 : 0;
+                
+                const elements = categoryElements[category];
+                if (elements) {
+                    elements.total.textContent = `฿${formatNumber(amount)}`;
+                    elements.bar.style.width = `${percentage}%`;
+                }
+            });
+        }
+        
+        function updateGoalProgress() {
+            if (!activeGoalId || goals.length === 0) {
+                noGoalElement.classList.remove('hidden');
+                activeGoalElement.classList.add('hidden');
+                return;
+            }
+            
+            const goal = goals.find(g => g.id === activeGoalId);
+            if (!goal) {
+                noGoalElement.classList.remove('hidden');
+                activeGoalElement.classList.add('hidden');
+                return;
+            }
+            
+            noGoalElement.classList.add('hidden');
+            activeGoalElement.classList.remove('hidden');
+            
+            // Calculate progress
+            const totalSaved = savings.reduce((sum, item) => sum + item.amount, 0);
+            const percentage = Math.min(Math.round((totalSaved / goal.amount) * 100), 100);
+            
+            // Update UI
+            goalNameElement.textContent = goal.name;
+            progressFillElement.style.height = `${percentage}%`;
+            progressPercentElement.textContent = `${percentage}%`;
+            progressAmountElement.textContent = `฿${formatNumber(totalSaved)} / ฿${formatNumber(goal.amount)}`;
+            
+            // Show celebration if goal is reached
+            if (percentage >= 100 && !goal.celebrated) {
+                showToast('🎉 ยินดีด้วย! คุณบรรลุเป้าหมายแล้ว');
+                goal.celebrated = true;
+                localStorage.setItem('coldPocketGoals', JSON.stringify(goals));
+            }
+        }
+        
+        function updateGoalsList() {
+            if (goals.length === 0) {
+                goalsListElement.innerHTML = '<div class="text-center text-gray-500 py-4">ยังไม่มีเป้าหมายการออม</div>';
+                return;
+            }
+            
+            goalsListElement.innerHTML = '';
+            const totalSaved = savings.reduce((sum, item) => sum + item.amount, 0);
+            
+            goals.forEach(goal => {
+                const percentage = Math.min(Math.round((totalSaved / goal.amount) * 100), 100);
+                const isActive = goal.id === activeGoalId;
+                
+                const goalElement = document.createElement('div');
+                goalElement.className = `bg-pink-50 rounded-xl p-4 shadow-md ${isActive ? 'border-2 border-pink-500' : ''}`;
+                
+                let targetDateText = '';
+                if (goal.targetDate) {
+                    const targetDate = new Date(goal.targetDate);
+                    targetDateText = `<div class="text-sm text-pink-600">เป้าหมาย: ${targetDate.getDate()}/${targetDate.getMonth() + 1}/${targetDate.getFullYear()}</div>`;
+                }
+                
+                goalElement.innerHTML = `
+                    <div class="flex justify-between items-center mb-2">
+                        <div>
+                            <h3 class="text-lg font-bold text-pink-600">${goal.name}</h3>
+                            ${targetDateText}
+                        </div>
+                        <div class="text-right">
+                            <div class="text-xl font-bold text-pink-700">฿${formatNumber(goal.amount)}</div>
+                            <div class="text-sm text-pink-600">${percentage}% สำเร็จ</div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg h-4 mb-3">
+                        <div class="bg-pink-500 h-4 rounded-lg" style="width: ${percentage}%"></div>
+                    </div>
+                    <div class="flex justify-end space-x-2">
+                        <button class="bg-pink-400 hover:bg-pink-500 text-white text-sm py-1 px-3 rounded-lg transition duration-300 goal-edit" data-id="${goal.id}">
+                            แก้ไข
+                        </button>
+                        ${isActive ? 
+                            '' : 
+                            `<button class="bg-blue-400 hover:bg-blue-500 text-white text-sm py-1 px-3 rounded-lg transition duration-300 goal-activate" data-id="${goal.id}">
+                                ตั้งเป็นเป้าหมายหลัก
+                            </button>`
+                        }
+                        <button class="bg-red-400 hover:bg-red-500 text-white text-sm py-1 px-3 rounded-lg transition duration-300 goal-delete" data-id="${goal.id}">
+                            ลบ
+                        </button>
+                    </div>
+                `;
+                
+                goalsListElement.appendChild(goalElement);
+            });
+            
+            // Add event listeners to buttons
+            document.querySelectorAll('.goal-edit').forEach(button => {
+                button.addEventListener('click', () => {
+                    const goalId = button.getAttribute('data-id');
+                    const goal = goals.find(g => g.id === goalId);
+                    if (goal) {
+                        openGoalModal(goal);
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.goal-activate').forEach(button => {
+                button.addEventListener('click', () => {
+                    const goalId = button.getAttribute('data-id');
+                    activeGoalId = goalId;
+                    localStorage.setItem('coldPocketActiveGoal', activeGoalId);
+                    updateGoalProgress();
+                    updateGoalsList();
+                    showToast('เปลี่ยนเป้าหมายหลักสำเร็จ');
+                });
+            });
+            
+            document.querySelectorAll('.goal-delete').forEach(button => {
+                button.addEventListener('click', () => {
+                    const goalId = button.getAttribute('data-id');
+                    deletingGoalId = goalId;
+                    openDeleteModal();
+                });
+            });
+        }
+        
+        function openGoalModal(goal = null) {
+            if (goal) {
+                goalModalTitle.textContent = 'แก้ไขเป้าหมายการออม';
+                goalNameInput.value = goal.name;
+                goalAmountInput.value = goal.amount;
+                goalDateInput.value = goal.targetDate || '';
+                editingGoalId = goal.id;
+            } else {
+                goalModalTitle.textContent = 'สร้างเป้าหมายการออม';
+                goalNameInput.value = '';
+                goalAmountInput.value = '';
+                goalDateInput.value = '';
+                editingGoalId = null;
+            }
+            
+            goalModal.classList.remove('hidden');
+        }
+        
+        function closeGoalModal() {
+            goalModal.classList.add('hidden');
+        }
+        
+        function openDeleteModal() {
+            deleteModal.classList.remove('hidden');
+        }
+        
+        function closeDeleteModal() {
+            deleteModal.classList.add('hidden');
+            deletingGoalId = null;
+        }
+        
+        function showToast(message, type = 'success') {
+            toastMessage.textContent = message;
+            
+            if (type === 'error') {
+                successToast.classList.remove('bg-green-500');
+                successToast.classList.add('bg-red-500');
+            } else {
+                successToast.classList.remove('bg-red-500');
+                successToast.classList.add('bg-green-500');
+            }
+            
+            successToast.classList.remove('translate-y-20', 'opacity-0');
+            
+            setTimeout(() => {
+                successToast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+        
+        function createCoinAnimation() {
+            const coin = document.createElement('div');
+            coin.className = 'coin-animation';
+            coin.innerHTML = `
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="#FFD700" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" stroke="#FFA500" stroke-width="2"/>
+                    <text x="12" y="16" text-anchor="middle" font-size="12" font-weight="bold" fill="#FFA500">฿</text>
+                </svg>
+            `;
+            
+            // Position the coin near the input
+            const rect = amountInput.getBoundingClientRect();
+            coin.style.left = `${rect.left + rect.width / 2}px`;
+            coin.style.top = `${rect.top}px`;
+            
+            document.body.appendChild(coin);
+            
+            // Remove the coin after animation completes
+            setTimeout(() => {
+                document.body.removeChild(coin);
+            }, 1000);
+        }
+        
+        function formatNumber(num) {
+            return num.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+        
+        // Initialize the app
+        updateTotalSavings();
+        updateRecentSavings();
+        updateGoalProgress();
+        
+        // Close modals when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === goalModal) {
+                closeGoalModal();
+            }
+            if (e.target === deleteModal) {
+                closeDeleteModal();
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'965b85ea95577331',t:'MTc1MzYxMjg3My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
