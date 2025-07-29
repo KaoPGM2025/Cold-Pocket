@@ -152,6 +152,13 @@
             opacity: 0.7;
             pointer-events: none;
         }
+        .app-partially-disabled {
+            opacity: 0.9;
+        }
+        .app-partially-disabled .disabled-feature {
+            opacity: 0.5;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -231,7 +238,7 @@
                                 <label class="block text-pink-700 mb-2">หมายเหตุ (ไม่บังคับ)</label>
                                 <input id="note-input" type="text" class="w-full px-4 py-2 rounded-lg border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-500" placeholder="บันทึกเพิ่มเติม...">
                             </div>
-                            <button id="save-button" class="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-4 rounded-lg transition duration-300 flex items-center justify-center">
+                            <button id="save-button" class="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-4 rounded-lg transition duration-300 flex items-center justify-center disabled-feature">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                                 </svg>
@@ -248,11 +255,19 @@
                     </div>
                     
                     <div class="flex-1 flex flex-col items-center">
-                        <h2 class="text-xl font-bold text-pink-600 mb-4">เป้าหมายการออม</h2>
+                        <div class="flex justify-between items-center w-full mb-4">
+                            <h2 class="text-xl font-bold text-pink-600">เป้าหมายการออม</h2>
+                            <button id="goal-settings-button" class="settings-btn bg-gray-200 hover:bg-gray-300 text-gray-700 p-2 rounded-full transition duration-300">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                            </button>
+                        </div>
                         <div id="goal-container" class="relative flex flex-col items-center">
                             <div id="no-goal" class="text-center mb-4">
                                 <p class="text-gray-500 mb-2">ยังไม่มีเป้าหมายการออม</p>
-                                <button id="create-goal-button" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                                <button id="create-goal-button" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 disabled-feature">
                                     สร้างเป้าหมาย
                                 </button>
                             </div>
@@ -270,10 +285,10 @@
                                     </div>
                                 </div>
                                 <div class="flex space-x-2">
-                                    <button id="edit-goal-button" class="bg-pink-400 hover:bg-pink-500 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                                    <button id="edit-goal-button" class="bg-pink-400 hover:bg-pink-500 text-white font-bold py-2 px-4 rounded-lg transition duration-300 disabled-feature">
                                         แก้ไขเป้าหมาย
                                     </button>
-                                    <button id="delete-active-goal-button" class="bg-red-400 hover:bg-red-500 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                                    <button id="delete-active-goal-button" class="bg-red-400 hover:bg-red-500 text-white font-bold py-2 px-4 rounded-lg transition duration-300 disabled-feature">
                                         ลบเป้าหมาย
                                     </button>
                                 </div>
@@ -412,7 +427,7 @@
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-xl font-bold text-pink-600">เป้าหมายการออม</h2>
                     <div class="flex space-x-2">
-                        <button id="add-goal-button" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                        <button id="add-goal-button" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 disabled-feature">
                             เพิ่มเป้าหมาย
                         </button>
                     </div>
@@ -503,7 +518,7 @@
             <div class="border-t border-gray-200 pt-4">
                 <h3 class="font-bold text-pink-600 mb-2">เกี่ยวกับแอปพลิเคชัน</h3>
                 <p class="text-sm text-gray-600 mb-1">Cold Pocket - แอปพลิเคชันออมเงินแบบประหยัด</p>
-                <p class="text-sm text-gray-600 mb-1">เวอร์ชัน: <span class="font-medium">2.1.0</span></p>
+                <p class="text-sm text-gray-600 mb-1">เวอร์ชัน: <span class="font-medium">2.1.5</span></p>
                 <p class="text-sm text-gray-600">พัฒนาโดย: Cold Pocket Team</p>
             </div>
         </div>
@@ -541,6 +556,7 @@
         const deleteActiveGoalButton = document.getElementById('delete-active-goal-button');
         const addGoalButton = document.getElementById('add-goal-button');
         const settingsButton = document.getElementById('settings-button');
+        const goalSettingsButton = document.getElementById('goal-settings-button');
         const goalModal = document.getElementById('goal-modal');
         const goalModalTitle = document.getElementById('goal-modal-title');
         const goalNameInput = document.getElementById('goal-name-input');
@@ -567,6 +583,7 @@
         const progressAmountElement = document.getElementById('progress-amount');
         const goalsListElement = document.getElementById('goals-list');
         const mainContent = document.querySelector('main');
+        const disabledFeatures = document.querySelectorAll('.disabled-feature');
         
         // Category elements
         const categoryElements = {
@@ -722,15 +739,21 @@
             openGoalModal();
         });
         
-        // Settings button
+        // Settings buttons
         settingsButton.addEventListener('click', () => {
             settingsButton.classList.toggle('active');
+            settingsModal.classList.remove('hidden');
+        });
+        
+        goalSettingsButton.addEventListener('click', () => {
+            goalSettingsButton.classList.toggle('active');
             settingsModal.classList.remove('hidden');
         });
         
         settingsCloseButton.addEventListener('click', () => {
             settingsModal.classList.add('hidden');
             settingsButton.classList.remove('active');
+            goalSettingsButton.classList.remove('active');
         });
         
         // App status toggle
@@ -842,14 +865,24 @@
                 appStatusText.classList.add('text-green-600');
                 statusIndicator.classList.remove('bg-red-500');
                 statusIndicator.classList.add('bg-green-500');
-                mainContent.classList.remove('app-disabled');
+                mainContent.classList.remove('app-partially-disabled');
+                
+                // Enable all features
+                disabledFeatures.forEach(element => {
+                    element.classList.remove('disabled-feature');
+                });
             } else {
                 appStatusText.textContent = 'ออฟไลน์';
                 appStatusText.classList.remove('text-green-600');
                 appStatusText.classList.add('text-red-600');
                 statusIndicator.classList.remove('bg-green-500');
                 statusIndicator.classList.add('bg-red-500');
-                mainContent.classList.add('app-disabled');
+                mainContent.classList.add('app-partially-disabled');
+                
+                // Disable specific features
+                disabledFeatures.forEach(element => {
+                    element.classList.add('disabled-feature');
+                });
             }
         }
         
@@ -953,7 +986,7 @@
                     </div>
                     <div class="flex items-center">
                         <div class="font-bold text-pink-700 mr-3">฿${formatNumber(item.amount)}</div>
-                        <button class="delete-btn bg-red-400 hover:bg-red-500 text-white p-1 rounded-full transition duration-300" data-id="${item.id}">
+                        <button class="delete-btn bg-red-400 hover:bg-red-500 text-white p-1 rounded-full transition duration-300 ${!appStatus ? 'disabled-feature' : ''}" data-id="${item.id}">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                             </svg>
@@ -965,19 +998,21 @@
             
             // Add event listeners to delete buttons
             document.querySelectorAll('.delete-btn').forEach(button => {
-                button.addEventListener('click', (e) => {
-                    if (!appStatus) {
-                        showToast('แอปพลิเคชันอยู่ในโหมดออฟไลน์', 'error');
-                        return;
-                    }
-                    
-                    e.stopPropagation();
-                    const savingId = parseInt(button.getAttribute('data-id'));
-                    deletingSavingId = savingId;
-                    deleteType = 'saving';
-                    deleteConfirmationMessage.textContent = 'คุณต้องการลบรายการออมเงินนี้ใช่หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้';
-                    openDeleteModal();
-                });
+                if (!button.classList.contains('disabled-feature')) {
+                    button.addEventListener('click', (e) => {
+                        if (!appStatus) {
+                            showToast('แอปพลิเคชันอยู่ในโหมดออฟไลน์', 'error');
+                            return;
+                        }
+                        
+                        e.stopPropagation();
+                        const savingId = parseInt(button.getAttribute('data-id'));
+                        deletingSavingId = savingId;
+                        deleteType = 'saving';
+                        deleteConfirmationMessage.textContent = 'คุณต้องการลบรายการออมเงินนี้ใช่หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้';
+                        openDeleteModal();
+                    });
+                }
             });
         }
         
@@ -1083,16 +1118,16 @@
                         <div class="bg-pink-500 h-4 rounded-lg" style="width: ${percentage}%"></div>
                     </div>
                     <div class="flex justify-end space-x-2">
-                        <button class="bg-pink-400 hover:bg-pink-500 text-white text-sm py-1 px-3 rounded-lg transition duration-300 goal-edit" data-id="${goal.id}">
+                        <button class="bg-pink-400 hover:bg-pink-500 text-white text-sm py-1 px-3 rounded-lg transition duration-300 goal-edit ${!appStatus ? 'disabled-feature' : ''}" data-id="${goal.id}">
                             แก้ไข
                         </button>
                         ${isActive ? 
                             '' : 
-                            `<button class="bg-blue-400 hover:bg-blue-500 text-white text-sm py-1 px-3 rounded-lg transition duration-300 goal-activate" data-id="${goal.id}">
+                            `<button class="bg-blue-400 hover:bg-blue-500 text-white text-sm py-1 px-3 rounded-lg transition duration-300 goal-activate ${!appStatus ? 'disabled-feature' : ''}" data-id="${goal.id}">
                                 ตั้งเป็นเป้าหมายหลัก
                             </button>`
                         }
-                        <button class="bg-red-400 hover:bg-red-500 text-white text-sm py-1 px-3 rounded-lg transition duration-300 goal-delete" data-id="${goal.id}">
+                        <button class="bg-red-400 hover:bg-red-500 text-white text-sm py-1 px-3 rounded-lg transition duration-300 goal-delete ${!appStatus ? 'disabled-feature' : ''}" data-id="${goal.id}">
                             ลบ
                         </button>
                     </div>
@@ -1103,49 +1138,55 @@
             
             // Add event listeners to buttons
             document.querySelectorAll('.goal-edit').forEach(button => {
-                button.addEventListener('click', () => {
-                    if (!appStatus) {
-                        showToast('แอปพลิเคชันอยู่ในโหมดออฟไลน์', 'error');
-                        return;
-                    }
-                    
-                    const goalId = button.getAttribute('data-id');
-                    const goal = goals.find(g => g.id === goalId);
-                    if (goal) {
-                        openGoalModal(goal);
-                    }
-                });
+                if (!button.classList.contains('disabled-feature')) {
+                    button.addEventListener('click', () => {
+                        if (!appStatus) {
+                            showToast('แอปพลิเคชันอยู่ในโหมดออฟไลน์', 'error');
+                            return;
+                        }
+                        
+                        const goalId = button.getAttribute('data-id');
+                        const goal = goals.find(g => g.id === goalId);
+                        if (goal) {
+                            openGoalModal(goal);
+                        }
+                    });
+                }
             });
             
             document.querySelectorAll('.goal-activate').forEach(button => {
-                button.addEventListener('click', () => {
-                    if (!appStatus) {
-                        showToast('แอปพลิเคชันอยู่ในโหมดออฟไลน์', 'error');
-                        return;
-                    }
-                    
-                    const goalId = button.getAttribute('data-id');
-                    activeGoalId = goalId;
-                    localStorage.setItem('coldPocketActiveGoal', activeGoalId);
-                    updateGoalProgress();
-                    updateGoalsList();
-                    showToast('เปลี่ยนเป้าหมายหลักสำเร็จ');
-                });
+                if (!button.classList.contains('disabled-feature')) {
+                    button.addEventListener('click', () => {
+                        if (!appStatus) {
+                            showToast('แอปพลิเคชันอยู่ในโหมดออฟไลน์', 'error');
+                            return;
+                        }
+                        
+                        const goalId = button.getAttribute('data-id');
+                        activeGoalId = goalId;
+                        localStorage.setItem('coldPocketActiveGoal', activeGoalId);
+                        updateGoalProgress();
+                        updateGoalsList();
+                        showToast('เปลี่ยนเป้าหมายหลักสำเร็จ');
+                    });
+                }
             });
             
             document.querySelectorAll('.goal-delete').forEach(button => {
-                button.addEventListener('click', () => {
-                    if (!appStatus) {
-                        showToast('แอปพลิเคชันอยู่ในโหมดออฟไลน์', 'error');
-                        return;
-                    }
-                    
-                    const goalId = button.getAttribute('data-id');
-                    deletingGoalId = goalId;
-                    deleteType = 'goal';
-                    deleteConfirmationMessage.textContent = 'คุณต้องการลบเป้าหมายนี้ใช่หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้';
-                    openDeleteModal();
-                });
+                if (!button.classList.contains('disabled-feature')) {
+                    button.addEventListener('click', () => {
+                        if (!appStatus) {
+                            showToast('แอปพลิเคชันอยู่ในโหมดออฟไลน์', 'error');
+                            return;
+                        }
+                        
+                        const goalId = button.getAttribute('data-id');
+                        deletingGoalId = goalId;
+                        deleteType = 'goal';
+                        deleteConfirmationMessage.textContent = 'คุณต้องการลบเป้าหมายนี้ใช่หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้';
+                        openDeleteModal();
+                    });
+                }
             });
         }
         
@@ -1243,8 +1284,9 @@
             if (e.target === settingsModal) {
                 settingsModal.classList.add('hidden');
                 settingsButton.classList.remove('active');
+                goalSettingsButton.classList.remove('active');
             }
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'966dc3e046a7732e',t:'MTc1MzgwNDE1NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'966ddb9034c27325',t:'MTc1MzgwNTEyNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
