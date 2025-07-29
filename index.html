@@ -91,6 +91,67 @@
         .history-item:hover .delete-btn {
             opacity: 1;
         }
+        /* Toggle switch styling */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .toggle-slider {
+            background-color: #FF9999;
+        }
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+        .settings-btn {
+            transition: all 0.3s ease;
+        }
+        .settings-btn:hover {
+            transform: rotate(45deg);
+        }
+        .settings-btn.active {
+            transform: rotate(90deg);
+        }
+        .gear-icon {
+            animation: spin 20s linear infinite;
+        }
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        .app-disabled {
+            opacity: 0.7;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -137,6 +198,12 @@
                 <button id="tab-history" class="tab-button flex-1 py-2 px-4 rounded-full text-center font-medium">ประวัติการออม</button>
                 <button id="tab-categories" class="tab-button flex-1 py-2 px-4 rounded-full text-center font-medium">หมวดหมู่</button>
                 <button id="tab-goals" class="tab-button flex-1 py-2 px-4 rounded-full text-center font-medium">เป้าหมาย</button>
+                <button id="settings-button" class="settings-btn ml-1 bg-gray-200 hover:bg-gray-300 text-gray-700 p-2 rounded-full transition duration-300">
+                    <svg class="gear-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                </button>
             </div>
 
             <!-- Home Tab -->
@@ -344,9 +411,11 @@
             <div id="goals-content" class="tab-content hidden bg-white rounded-2xl p-6 shadow-lg">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-xl font-bold text-pink-600">เป้าหมายการออม</h2>
-                    <button id="add-goal-button" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
-                        เพิ่มเป้าหมาย
-                    </button>
+                    <div class="flex space-x-2">
+                        <button id="add-goal-button" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                            เพิ่มเป้าหมาย
+                        </button>
+                    </div>
                 </div>
                 <div id="goals-list" class="space-y-4">
                     <div class="text-center text-gray-500 py-4">ยังไม่มีเป้าหมายการออม</div>
@@ -398,6 +467,48 @@
         </div>
     </div>
 
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-6 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-pink-600">ตั้งค่า</h2>
+                <button id="settings-close-button" class="text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <h3 class="font-bold text-pink-600">สถานะการทำงาน</h3>
+                        <p class="text-sm text-gray-600">เปิด/ปิดการทำงานของแอปพลิเคชัน</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input id="app-status-toggle" type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h3 class="font-bold text-pink-600">สถานะระบบ</h3>
+                        <p id="app-status-text" class="text-sm font-medium text-green-600">ออนไลน์</p>
+                    </div>
+                    <div id="status-indicator" class="w-4 h-4 bg-green-500 rounded-full"></div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-200 pt-4">
+                <h3 class="font-bold text-pink-600 mb-2">เกี่ยวกับแอปพลิเคชัน</h3>
+                <p class="text-sm text-gray-600 mb-1">Cold Pocket - แอปพลิเคชันออมเงินแบบประหยัด</p>
+                <p class="text-sm text-gray-600 mb-1">เวอร์ชัน: <span class="font-medium">2.1.0</span></p>
+                <p class="text-sm text-gray-600">พัฒนาโดย: Cold Pocket Team</p>
+            </div>
+        </div>
+    </div>
+
     <!-- Success Toast -->
     <div id="success-toast" class="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 flex items-center">
         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -411,6 +522,7 @@
         let savings = JSON.parse(localStorage.getItem('coldPocketSavings')) || [];
         let goals = JSON.parse(localStorage.getItem('coldPocketGoals')) || [];
         let activeGoalId = localStorage.getItem('coldPocketActiveGoal') || null;
+        let appStatus = localStorage.getItem('coldPocketAppStatus') !== 'offline';
         
         // DOM Elements
         const tabButtons = document.querySelectorAll('.tab-button');
@@ -428,6 +540,7 @@
         const editGoalButton = document.getElementById('edit-goal-button');
         const deleteActiveGoalButton = document.getElementById('delete-active-goal-button');
         const addGoalButton = document.getElementById('add-goal-button');
+        const settingsButton = document.getElementById('settings-button');
         const goalModal = document.getElementById('goal-modal');
         const goalModalTitle = document.getElementById('goal-modal-title');
         const goalNameInput = document.getElementById('goal-name-input');
@@ -439,6 +552,11 @@
         const deleteConfirmationMessage = document.getElementById('delete-confirmation-message');
         const deleteCancelButton = document.getElementById('delete-cancel-button');
         const deleteConfirmButton = document.getElementById('delete-confirm-button');
+        const settingsModal = document.getElementById('settings-modal');
+        const settingsCloseButton = document.getElementById('settings-close-button');
+        const appStatusToggle = document.getElementById('app-status-toggle');
+        const appStatusText = document.getElementById('app-status-text');
+        const statusIndicator = document.getElementById('status-indicator');
         const successToast = document.getElementById('success-toast');
         const toastMessage = document.getElementById('toast-message');
         const noGoalElement = document.getElementById('no-goal');
@@ -448,6 +566,7 @@
         const progressPercentElement = document.getElementById('progress-percent');
         const progressAmountElement = document.getElementById('progress-amount');
         const goalsListElement = document.getElementById('goals-list');
+        const mainContent = document.querySelector('main');
         
         // Category elements
         const categoryElements = {
@@ -482,6 +601,10 @@
         let deletingSavingId = null;
         let deleteType = null; // 'goal' or 'saving'
         
+        // Set initial app status
+        appStatusToggle.checked = appStatus;
+        updateAppStatus();
+        
         // Tab switching
         tabButtons.forEach(button => {
             button.addEventListener('click', () => {
@@ -507,6 +630,11 @@
         
         // Save new saving
         saveButton.addEventListener('click', () => {
+            if (!appStatus) {
+                showToast('แอปพลิเคชันอยู่ในโหมดออฟไลน์', 'error');
+                return;
+            }
+            
             const amount = parseFloat(amountInput.value);
             if (isNaN(amount) || amount <= 0) {
                 showToast('กรุณาใส่จำนวนเงินที่ถูกต้อง', 'error');
@@ -552,9 +680,20 @@
         // Goal modal events
         let editingGoalId = null;
         
-        createGoalButton.addEventListener('click', () => openGoalModal());
+        createGoalButton.addEventListener('click', () => {
+            if (!appStatus) {
+                showToast('แอปพลิเคชันอยู่ในโหมดออฟไลน์', 'error');
+                return;
+            }
+            openGoalModal();
+        });
         
         editGoalButton.addEventListener('click', () => {
+            if (!appStatus) {
+                showToast('แอปพลิเคชันอยู่ในโหมดออฟไลน์', 'error');
+                return;
+            }
+            
             const goal = goals.find(g => g.id === activeGoalId);
             if (goal) {
                 openGoalModal(goal);
@@ -562,6 +701,11 @@
         });
         
         deleteActiveGoalButton.addEventListener('click', () => {
+            if (!appStatus) {
+                showToast('แอปพลิเคชันอยู่ในโหมดออฟไลน์', 'error');
+                return;
+            }
+            
             if (activeGoalId) {
                 deletingGoalId = activeGoalId;
                 deleteType = 'goal';
@@ -570,7 +714,32 @@
             }
         });
         
-        addGoalButton.addEventListener('click', () => openGoalModal());
+        addGoalButton.addEventListener('click', () => {
+            if (!appStatus) {
+                showToast('แอปพลิเคชันอยู่ในโหมดออฟไลน์', 'error');
+                return;
+            }
+            openGoalModal();
+        });
+        
+        // Settings button
+        settingsButton.addEventListener('click', () => {
+            settingsButton.classList.toggle('active');
+            settingsModal.classList.remove('hidden');
+        });
+        
+        settingsCloseButton.addEventListener('click', () => {
+            settingsModal.classList.add('hidden');
+            settingsButton.classList.remove('active');
+        });
+        
+        // App status toggle
+        appStatusToggle.addEventListener('change', () => {
+            appStatus = appStatusToggle.checked;
+            localStorage.setItem('coldPocketAppStatus', appStatus ? 'online' : 'offline');
+            updateAppStatus();
+            showToast(appStatus ? 'แอปพลิเคชันอยู่ในโหมดออนไลน์' : 'แอปพลิเคชันอยู่ในโหมดออฟไลน์');
+        });
         
         goalCancelButton.addEventListener('click', closeGoalModal);
         
@@ -666,6 +835,24 @@
         });
         
         // Helper functions
+        function updateAppStatus() {
+            if (appStatus) {
+                appStatusText.textContent = 'ออนไลน์';
+                appStatusText.classList.remove('text-red-600');
+                appStatusText.classList.add('text-green-600');
+                statusIndicator.classList.remove('bg-red-500');
+                statusIndicator.classList.add('bg-green-500');
+                mainContent.classList.remove('app-disabled');
+            } else {
+                appStatusText.textContent = 'ออฟไลน์';
+                appStatusText.classList.remove('text-green-600');
+                appStatusText.classList.add('text-red-600');
+                statusIndicator.classList.remove('bg-green-500');
+                statusIndicator.classList.add('bg-red-500');
+                mainContent.classList.add('app-disabled');
+            }
+        }
+        
         function updateTotalSavings() {
             const total = savings.reduce((sum, item) => sum + item.amount, 0);
             totalSavingsElement.textContent = `฿${formatNumber(total)}`;
@@ -779,6 +966,11 @@
             // Add event listeners to delete buttons
             document.querySelectorAll('.delete-btn').forEach(button => {
                 button.addEventListener('click', (e) => {
+                    if (!appStatus) {
+                        showToast('แอปพลิเคชันอยู่ในโหมดออฟไลน์', 'error');
+                        return;
+                    }
+                    
                     e.stopPropagation();
                     const savingId = parseInt(button.getAttribute('data-id'));
                     deletingSavingId = savingId;
@@ -912,6 +1104,11 @@
             // Add event listeners to buttons
             document.querySelectorAll('.goal-edit').forEach(button => {
                 button.addEventListener('click', () => {
+                    if (!appStatus) {
+                        showToast('แอปพลิเคชันอยู่ในโหมดออฟไลน์', 'error');
+                        return;
+                    }
+                    
                     const goalId = button.getAttribute('data-id');
                     const goal = goals.find(g => g.id === goalId);
                     if (goal) {
@@ -922,6 +1119,11 @@
             
             document.querySelectorAll('.goal-activate').forEach(button => {
                 button.addEventListener('click', () => {
+                    if (!appStatus) {
+                        showToast('แอปพลิเคชันอยู่ในโหมดออฟไลน์', 'error');
+                        return;
+                    }
+                    
                     const goalId = button.getAttribute('data-id');
                     activeGoalId = goalId;
                     localStorage.setItem('coldPocketActiveGoal', activeGoalId);
@@ -933,6 +1135,11 @@
             
             document.querySelectorAll('.goal-delete').forEach(button => {
                 button.addEventListener('click', () => {
+                    if (!appStatus) {
+                        showToast('แอปพลิเคชันอยู่ในโหมดออฟไลน์', 'error');
+                        return;
+                    }
+                    
                     const goalId = button.getAttribute('data-id');
                     deletingGoalId = goalId;
                     deleteType = 'goal';
@@ -1033,7 +1240,11 @@
             if (e.target === deleteModal) {
                 closeDeleteModal();
             }
+            if (e.target === settingsModal) {
+                settingsModal.classList.add('hidden');
+                settingsButton.classList.remove('active');
+            }
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'965b9e91c46f4f58',t:'MTc1MzYxMzg4My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'966dc3e046a7732e',t:'MTc1MzgwNDE1NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
