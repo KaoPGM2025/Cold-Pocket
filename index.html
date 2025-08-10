@@ -9,8 +9,35 @@
     <style>
         body {
             font-family: 'Prompt', sans-serif;
-            background-color: #FFEFD5;
-            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23FFB6C1' fill-opacity='0.2' fill-rule='evenodd'/%3E%3C/svg%3E");
+            background: linear-gradient(135deg, #E8F5E8 0%, #F0F8FF 50%, #FFF8DC 100%);
+            background-image: 
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23FFB6C1' fill-opacity='0.15'%3E%3Cpath d='M30 30c0-11.046-8.954-20-20-20s-20 8.954-20 20 8.954 20 20 20 20-8.954 20-20zm0 0c0 11.046 8.954 20 20 20s20-8.954 20-20-8.954-20-20-20-20 8.954-20 20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"),
+                url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2398FB98' fill-opacity='0.1'%3E%3Cpath d='M20 20c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10zm10-10c0 5.5 4.5 10 10 10s10-4.5 10-10-4.5-10-10-10-10 4.5-10 10z'/%3E%3C/g%3E%3C/svg%3E");
+            min-height: 100vh;
+        }
+        .mothers-day-banner {
+            background: linear-gradient(45deg, #FFB6C1, #98FB98, #87CEEB);
+            background-size: 300% 300%;
+            animation: gradientShift 6s ease infinite;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .jasmine-flower {
+            display: inline-block;
+            margin: 0 5px;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
         }
         .piggy-bank {
             filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.1));
@@ -163,6 +190,16 @@
 </head>
 <body class="min-h-screen">
     <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Mother's Day Banner -->
+        <div class="mothers-day-banner">
+            <div class="flex items-center justify-center mb-2">
+                <span class="jasmine-flower text-2xl">🌸</span>
+                <h2 class="text-2xl font-bold text-white mx-3">วันแม่แห่งชาติ 12 สิงหาคม</h2>
+                <span class="jasmine-flower text-2xl">🌸</span>
+            </div>
+            <p class="text-white font-medium">💝 ออมเงินเพื่อแม่ที่รัก เริ่มต้นความกตัญญูด้วยการออมอย่างมีสติ 💝</p>
+        </div>
+        
         <!-- Header -->
         <header class="flex justify-between items-center mb-8">
             <div class="flex items-center">
@@ -226,11 +263,6 @@
                             <div class="mb-4">
                                 <label class="block text-pink-700 mb-2">หมวดหมู่</label>
                                 <select id="category-select" class="w-full px-4 py-2 rounded-lg border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-500">
-                                    <option value="อาหาร">อาหาร</option>
-                                    <option value="ช้อปปิ้ง">ช้อปปิ้ง</option>
-                                    <option value="การศึกษา">การศึกษา</option>
-                                    <option value="ท่องเที่ยว">ท่องเที่ยว</option>
-                                    <option value="ฉุกเฉิน">ฉุกเฉิน</option>
                                     <option value="อื่นๆ">อื่นๆ</option>
                                 </select>
                             </div>
@@ -304,11 +336,6 @@
                 <div class="mb-4 flex gap-2">
                     <select id="filter-category" class="px-4 py-2 rounded-lg border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-500">
                         <option value="all">ทุกหมวดหมู่</option>
-                        <option value="อาหาร">อาหาร</option>
-                        <option value="ช้อปปิ้ง">ช้อปปิ้ง</option>
-                        <option value="การศึกษา">การศึกษา</option>
-                        <option value="ท่องเที่ยว">ท่องเที่ยว</option>
-                        <option value="ฉุกเฉิน">ฉุกเฉิน</option>
                         <option value="อื่นๆ">อื่นๆ</option>
                     </select>
                     <select id="filter-date" class="px-4 py-2 rounded-lg border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-500">
@@ -328,7 +355,12 @@
 
             <!-- Categories Tab -->
             <div id="categories-content" class="tab-content hidden bg-white rounded-2xl p-6 shadow-lg">
-                <h2 class="text-xl font-bold text-pink-600 mb-4">หมวดหมู่การออม</h2>
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold text-pink-600">หมวดหมู่การออม</h2>
+                    <button id="add-category-button" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 disabled-feature">
+                        เพิ่มหมวดหมู่
+                    </button>
+                </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <div class="category-card bg-pink-50 rounded-xl p-4 shadow-md">
                         <div class="flex items-center mb-3">
@@ -482,6 +514,42 @@
         </div>
     </div>
 
+    <!-- Category Modal -->
+    <div id="category-modal" class="modal fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-6 max-w-md w-full mx-4">
+            <h2 id="category-modal-title" class="text-xl font-bold text-pink-600 mb-4">เพิ่มหมวดหมู่ใหม่</h2>
+            <div class="mb-4">
+                <label class="block text-pink-700 mb-2">ชื่อหมวดหมู่</label>
+                <input id="category-name-input" type="text" class="w-full px-4 py-2 rounded-lg border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-500" placeholder="เช่น ของใช้ส่วนตัว">
+            </div>
+            <div class="mb-4">
+                <label class="block text-pink-700 mb-2">เลือกไอคอน</label>
+                <div class="grid grid-cols-6 gap-2" id="icon-selector">
+                    <button class="icon-option p-2 border-2 border-gray-300 rounded-lg hover:border-pink-500 transition duration-300" data-icon="🛍️">🛍️</button>
+                    <button class="icon-option p-2 border-2 border-gray-300 rounded-lg hover:border-pink-500 transition duration-300" data-icon="🏠">🏠</button>
+                    <button class="icon-option p-2 border-2 border-gray-300 rounded-lg hover:border-pink-500 transition duration-300" data-icon="🚗">🚗</button>
+                    <button class="icon-option p-2 border-2 border-gray-300 rounded-lg hover:border-pink-500 transition duration-300" data-icon="💊">💊</button>
+                    <button class="icon-option p-2 border-2 border-gray-300 rounded-lg hover:border-pink-500 transition duration-300" data-icon="🎮">🎮</button>
+                    <button class="icon-option p-2 border-2 border-gray-300 rounded-lg hover:border-pink-500 transition duration-300" data-icon="👕">👕</button>
+                    <button class="icon-option p-2 border-2 border-gray-300 rounded-lg hover:border-pink-500 transition duration-300" data-icon="📱">📱</button>
+                    <button class="icon-option p-2 border-2 border-gray-300 rounded-lg hover:border-pink-500 transition duration-300" data-icon="💄">💄</button>
+                    <button class="icon-option p-2 border-2 border-gray-300 rounded-lg hover:border-pink-500 transition duration-300" data-icon="🎵">🎵</button>
+                    <button class="icon-option p-2 border-2 border-gray-300 rounded-lg hover:border-pink-500 transition duration-300" data-icon="🌸">🌸</button>
+                    <button class="icon-option p-2 border-2 border-gray-300 rounded-lg hover:border-pink-500 transition duration-300" data-icon="💝">💝</button>
+                    <button class="icon-option p-2 border-2 border-gray-300 rounded-lg hover:border-pink-500 transition duration-300" data-icon="⭐">⭐</button>
+                </div>
+            </div>
+            <div class="flex justify-end space-x-2">
+                <button id="category-cancel-button" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg transition duration-300">
+                    ยกเลิก
+                </button>
+                <button id="category-save-button" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                    บันทึก
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Settings Modal -->
     <div id="settings-modal" class="modal fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
         <div class="bg-white rounded-2xl p-6 max-w-md w-full mx-4">
@@ -515,11 +583,44 @@
                 </div>
             </div>
             
-            <div class="border-t border-gray-200 pt-4">
+            <div class="border-t border-gray-200 pt-4 mb-4">
                 <h3 class="font-bold text-pink-600 mb-2">เกี่ยวกับแอปพลิเคชัน</h3>
                 <p class="text-sm text-gray-600 mb-1">Cold Pocket - แอปพลิเคชันออมเงินแบบประหยัด</p>
-                <p class="text-sm text-gray-600 mb-1">เวอร์ชัน: <span class="font-medium">2.1.5</span></p>
+                <p class="text-sm text-gray-600 mb-1">เวอร์ชัน: <span class="font-medium">2.2.0</span></p>
                 <p class="text-sm text-gray-600">พัฒนาโดย: Cold Pocket Team</p>
+            </div>
+            
+            <div class="border-t border-gray-200 pt-4">
+                <h3 class="font-bold text-pink-600 mb-2">ประวัติการอัพเดต</h3>
+                <div class="max-h-40 overflow-y-auto">
+                    <div class="text-sm text-gray-600 mb-2">
+                        <div class="font-medium text-pink-600">เวอร์ชัน 2.2.0</div>
+                        <div class="text-xs text-gray-500" id="current-update-time"></div>
+                        <div class="ml-2">
+                            • เพิ่มธีมวันแม่แห่งชาติ<br>
+                            • เพิ่มระบบจัดการหมวดหมู่แบบกำหนดเอง<br>
+                            • เพิ่มประวัติการอัพเดตในตั้งค่า
+                        </div>
+                    </div>
+                    <div class="text-sm text-gray-600 mb-2">
+                        <div class="font-medium text-pink-600">เวอร์ชัน 2.1.5</div>
+                        <div class="text-xs text-gray-500">10 สิงหาคม 2567, 14:30</div>
+                        <div class="ml-2">
+                            • เพิ่มปุ่มตั้งค่าข้างเป้าหมาย<br>
+                            • เพิ่มระบบออนไลน์/ออฟไลน์<br>
+                            • ปรับปรุงการทำงานของระบบ
+                        </div>
+                    </div>
+                    <div class="text-sm text-gray-600">
+                        <div class="font-medium text-pink-600">เวอร์ชัน 2.1.0</div>
+                        <div class="text-xs text-gray-500">8 สิงหาคม 2567, 10:15</div>
+                        <div class="ml-2">
+                            • เพิ่มระบบเป้าหมายการออม<br>
+                            • ปรับปรุงหน้าตาและประสบการณ์ผู้ใช้<br>
+                            • เพิ่มระบบสถิติหมวดหมู่
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -538,6 +639,15 @@
         let goals = JSON.parse(localStorage.getItem('coldPocketGoals')) || [];
         let activeGoalId = localStorage.getItem('coldPocketActiveGoal') || null;
         let appStatus = localStorage.getItem('coldPocketAppStatus') !== 'offline';
+        let customCategories = JSON.parse(localStorage.getItem('coldPocketCustomCategories')) || [];
+        
+        // Default categories
+        const defaultCategories = [
+            { name: 'อื่นๆ', icon: '⚙️', isDefault: true }
+        ];
+        
+        // Combine default and custom categories
+        let allCategories = [...defaultCategories, ...customCategories];
         
         // DOM Elements
         const tabButtons = document.querySelectorAll('.tab-button');
@@ -555,8 +665,15 @@
         const editGoalButton = document.getElementById('edit-goal-button');
         const deleteActiveGoalButton = document.getElementById('delete-active-goal-button');
         const addGoalButton = document.getElementById('add-goal-button');
+        const addCategoryButton = document.getElementById('add-category-button');
         const settingsButton = document.getElementById('settings-button');
         const goalSettingsButton = document.getElementById('goal-settings-button');
+        const categoryModal = document.getElementById('category-modal');
+        const categoryModalTitle = document.getElementById('category-modal-title');
+        const categoryNameInput = document.getElementById('category-name-input');
+        const categoryCancelButton = document.getElementById('category-cancel-button');
+        const categorySaveButton = document.getElementById('category-save-button');
+        const iconSelector = document.getElementById('icon-selector');
         const goalModal = document.getElementById('goal-modal');
         const goalModalTitle = document.getElementById('goal-modal-title');
         const goalNameInput = document.getElementById('goal-name-input');
@@ -585,38 +702,17 @@
         const mainContent = document.querySelector('main');
         const disabledFeatures = document.querySelectorAll('.disabled-feature');
         
-        // Category elements
-        const categoryElements = {
-            'อาหาร': {
-                total: document.getElementById('food-total'),
-                bar: document.getElementById('food-bar')
-            },
-            'ช้อปปิ้ง': {
-                total: document.getElementById('shopping-total'),
-                bar: document.getElementById('shopping-bar')
-            },
-            'การศึกษา': {
-                total: document.getElementById('education-total'),
-                bar: document.getElementById('education-bar')
-            },
-            'ท่องเที่ยว': {
-                total: document.getElementById('travel-total'),
-                bar: document.getElementById('travel-bar')
-            },
-            'ฉุกเฉิน': {
-                total: document.getElementById('emergency-total'),
-                bar: document.getElementById('emergency-bar')
-            },
-            'อื่นๆ': {
-                total: document.getElementById('other-total'),
-                bar: document.getElementById('other-bar')
-            }
-        };
+        // Category elements (removed - now dynamically generated)
         
         // Variables for delete functionality
         let deletingGoalId = null;
         let deletingSavingId = null;
-        let deleteType = null; // 'goal' or 'saving'
+        let deletingCategoryName = null;
+        let deleteType = null; // 'goal', 'saving', or 'category-savings'
+        
+        // Variables for category management
+        let selectedIcon = '🛍️';
+        let editingCategoryIndex = null;
         
         // Set initial app status
         appStatusToggle.checked = appStatus;
@@ -739,6 +835,14 @@
             openGoalModal();
         });
         
+        addCategoryButton.addEventListener('click', () => {
+            if (!appStatus) {
+                showToast('แอปพลิเคชันอยู่ในโหมดออฟไลน์', 'error');
+                return;
+            }
+            openCategoryModal();
+        });
+        
         // Settings buttons
         settingsButton.addEventListener('click', () => {
             settingsButton.classList.toggle('active');
@@ -762,6 +866,57 @@
             localStorage.setItem('coldPocketAppStatus', appStatus ? 'online' : 'offline');
             updateAppStatus();
             showToast(appStatus ? 'แอปพลิเคชันอยู่ในโหมดออนไลน์' : 'แอปพลิเคชันอยู่ในโหมดออฟไลน์');
+        });
+        
+        // Category modal events
+        categoryCancelButton.addEventListener('click', closeCategoryModal);
+        
+        categorySaveButton.addEventListener('click', () => {
+            const name = categoryNameInput.value.trim();
+            
+            if (!name) {
+                showToast('กรุณาใส่ชื่อหมวดหมู่', 'error');
+                return;
+            }
+            
+            // Check if category name already exists
+            if (allCategories.some(cat => cat.name === name)) {
+                showToast('ชื่อหมวดหมู่นี้มีอยู่แล้ว', 'error');
+                return;
+            }
+            
+            const newCategory = {
+                name: name,
+                icon: selectedIcon,
+                isDefault: false
+            };
+            
+            customCategories.push(newCategory);
+            allCategories.push(newCategory);
+            localStorage.setItem('coldPocketCustomCategories', JSON.stringify(customCategories));
+            
+            // Update category select options
+            updateCategorySelects();
+            updateCategoryStats();
+            
+            closeCategoryModal();
+            showToast('เพิ่มหมวดหมู่สำเร็จ');
+        });
+        
+        // Icon selector events
+        iconSelector.addEventListener('click', (e) => {
+            if (e.target.classList.contains('icon-option')) {
+                // Remove previous selection
+                document.querySelectorAll('.icon-option').forEach(btn => {
+                    btn.classList.remove('border-pink-500', 'bg-pink-100');
+                    btn.classList.add('border-gray-300');
+                });
+                
+                // Add selection to clicked icon
+                e.target.classList.remove('border-gray-300');
+                e.target.classList.add('border-pink-500', 'bg-pink-100');
+                selectedIcon = e.target.getAttribute('data-icon');
+            }
         });
         
         goalCancelButton.addEventListener('click', closeGoalModal);
@@ -853,6 +1008,20 @@
                     
                     showToast('ลบรายการออมเงินสำเร็จ');
                 }
+            } else if (deleteType === 'category-savings' && deletingCategoryName) {
+                // Delete all savings in the category
+                const deletedCount = savings.filter(s => s.category === deletingCategoryName).length;
+                savings = savings.filter(s => s.category !== deletingCategoryName);
+                localStorage.setItem('coldPocketSavings', JSON.stringify(savings));
+                
+                // Update all related UI
+                updateTotalSavings();
+                updateRecentSavings();
+                updateHistoryList();
+                updateCategoryStats();
+                updateGoalProgress();
+                
+                showToast(`ลบรายการออมเงิน ${deletedCount} รายการสำเร็จ`);
             }
             closeDeleteModal();
         });
@@ -1017,33 +1186,169 @@
         }
         
         function updateCategoryStats() {
+            // Clear existing category display
+            const categoriesGrid = document.querySelector('#categories-content .grid');
+            categoriesGrid.innerHTML = '';
+            
             const categorySums = {};
-            const categories = ['อาหาร', 'ช้อปปิ้ง', 'การศึกษา', 'ท่องเที่ยว', 'ฉุกเฉิน', 'อื่นๆ'];
             
             // Initialize all categories to 0
-            categories.forEach(category => {
-                categorySums[category] = 0;
+            allCategories.forEach(category => {
+                categorySums[category.name] = 0;
             });
             
             // Calculate sums for each category
             savings.forEach(item => {
-                categorySums[item.category] += item.amount;
+                if (categorySums.hasOwnProperty(item.category)) {
+                    categorySums[item.category] += item.amount;
+                }
             });
             
             // Calculate total
             const total = Object.values(categorySums).reduce((sum, amount) => sum + amount, 0);
             
-            // Update UI for each category
-            categories.forEach(category => {
-                const amount = categorySums[category];
+            // Create category cards
+            allCategories.forEach(category => {
+                const amount = categorySums[category.name];
                 const percentage = total > 0 ? (amount / total) * 100 : 0;
                 
-                const elements = categoryElements[category];
-                if (elements) {
-                    elements.total.textContent = `฿${formatNumber(amount)}`;
-                    elements.bar.style.width = `${percentage}%`;
+                const categoryCard = document.createElement('div');
+                categoryCard.className = 'category-card bg-pink-50 rounded-xl p-4 shadow-md relative';
+                
+                categoryCard.innerHTML = `
+                    <div class="flex items-center mb-3">
+                        <div class="category-icon bg-pink-200 p-3 rounded-full mr-3">
+                            <span class="text-2xl">${category.icon}</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-pink-600">${category.name}</h3>
+                        ${!category.isDefault ? `
+                            <button class="delete-category-btn absolute top-2 right-2 bg-red-400 hover:bg-red-500 text-white p-1 rounded-full transition duration-300 ${!appStatus ? 'disabled-feature' : ''}" data-category="${category.name}">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        ` : ''}
+                    </div>
+                    <p class="text-xl font-bold text-pink-700">฿${formatNumber(amount)}</p>
+                    <div class="mt-2 bg-white rounded-lg h-2">
+                        <div class="bg-pink-500 h-2 rounded-lg" style="width: ${percentage}%"></div>
+                    </div>
+                    <div class="mt-3 flex justify-between items-center">
+                        <span class="text-sm text-pink-600">${savings.filter(s => s.category === category.name).length} รายการ</span>
+                        <button class="delete-category-savings-btn bg-red-400 hover:bg-red-500 text-white text-xs py-1 px-2 rounded-lg transition duration-300 ${!appStatus || amount === 0 ? 'disabled-feature opacity-50' : ''}" data-category="${category.name}">
+                            ลบรายการทั้งหมด
+                        </button>
+                    </div>
+                `;
+                
+                categoriesGrid.appendChild(categoryCard);
+            });
+            
+            // Add event listeners to delete buttons
+            document.querySelectorAll('.delete-category-btn').forEach(button => {
+                if (!button.classList.contains('disabled-feature')) {
+                    button.addEventListener('click', (e) => {
+                        if (!appStatus) {
+                            showToast('แอปพลิเคชันอยู่ในโหมดออฟไลน์', 'error');
+                            return;
+                        }
+                        
+                        e.stopPropagation();
+                        const categoryName = button.getAttribute('data-category');
+                        deleteCustomCategory(categoryName);
+                    });
                 }
             });
+            
+            // Add event listeners to delete category savings buttons
+            document.querySelectorAll('.delete-category-savings-btn').forEach(button => {
+                if (!button.classList.contains('disabled-feature')) {
+                    button.addEventListener('click', (e) => {
+                        if (!appStatus) {
+                            showToast('แอปพลิเคชันอยู่ในโหมดออฟไลน์', 'error');
+                            return;
+                        }
+                        
+                        e.stopPropagation();
+                        const categoryName = button.getAttribute('data-category');
+                        const categoryAmount = savings.filter(s => s.category === categoryName).reduce((sum, s) => sum + s.amount, 0);
+                        
+                        if (categoryAmount === 0) {
+                            showToast('ไม่มีรายการออมเงินในหมวดหมู่นี้', 'error');
+                            return;
+                        }
+                        
+                        deletingCategoryName = categoryName;
+                        deleteType = 'category-savings';
+                        deleteConfirmationMessage.textContent = `คุณต้องการลบรายการออมเงินทั้งหมดในหมวดหมู่ "${categoryName}" ใช่หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้`;
+                        openDeleteModal();
+                    });
+                }
+            });
+        }
+        
+        function updateCategorySelects() {
+            // Update main category select
+            categorySelect.innerHTML = '';
+            allCategories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category.name;
+                option.textContent = category.name;
+                categorySelect.appendChild(option);
+            });
+            
+            // Update filter category select
+            filterCategoryElement.innerHTML = '<option value="all">ทุกหมวดหมู่</option>';
+            allCategories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category.name;
+                option.textContent = category.name;
+                filterCategoryElement.appendChild(option);
+            });
+        }
+        
+        function openCategoryModal() {
+            categoryNameInput.value = '';
+            selectedIcon = '🛍️';
+            
+            // Reset icon selection
+            document.querySelectorAll('.icon-option').forEach(btn => {
+                btn.classList.remove('border-pink-500', 'bg-pink-100');
+                btn.classList.add('border-gray-300');
+            });
+            
+            // Select first icon by default
+            const firstIcon = document.querySelector('.icon-option');
+            if (firstIcon) {
+                firstIcon.classList.remove('border-gray-300');
+                firstIcon.classList.add('border-pink-500', 'bg-pink-100');
+            }
+            
+            categoryModal.classList.remove('hidden');
+        }
+        
+        function closeCategoryModal() {
+            categoryModal.classList.add('hidden');
+        }
+        
+        function deleteCustomCategory(categoryName) {
+            // Check if category is being used in savings
+            const isUsed = savings.some(saving => saving.category === categoryName);
+            
+            if (isUsed) {
+                showToast('ไม่สามารถลบหมวดหมู่ที่มีการใช้งานอยู่', 'error');
+                return;
+            }
+            
+            // Remove from custom categories
+            customCategories = customCategories.filter(cat => cat.name !== categoryName);
+            allCategories = allCategories.filter(cat => cat.name !== categoryName);
+            
+            localStorage.setItem('coldPocketCustomCategories', JSON.stringify(customCategories));
+            
+            updateCategorySelects();
+            updateCategoryStats();
+            showToast('ลบหมวดหมู่สำเร็จ');
         }
         
         function updateGoalProgress() {
@@ -1220,6 +1525,7 @@
             deleteModal.classList.add('hidden');
             deletingGoalId = null;
             deletingSavingId = null;
+            deletingCategoryName = null;
             deleteType = null;
         }
         
@@ -1272,6 +1578,12 @@
         updateTotalSavings();
         updateRecentSavings();
         updateGoalProgress();
+        updateCategorySelects();
+        
+        // Set current update time
+        const now = new Date();
+        const currentTime = `${now.getDate()} ${['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'][now.getMonth()]} ${now.getFullYear() + 543}, ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+        document.getElementById('current-update-time').textContent = currentTime;
         
         // Close modals when clicking outside
         window.addEventListener('click', (e) => {
@@ -1281,6 +1593,9 @@
             if (e.target === deleteModal) {
                 closeDeleteModal();
             }
+            if (e.target === categoryModal) {
+                closeCategoryModal();
+            }
             if (e.target === settingsModal) {
                 settingsModal.classList.add('hidden');
                 settingsButton.classList.remove('active');
@@ -1288,5 +1603,5 @@
             }
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'966ddb9034c27325',t:'MTc1MzgwNTEyNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96d0aa29005e3912',t:'MTc1NDg0MTE5Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
