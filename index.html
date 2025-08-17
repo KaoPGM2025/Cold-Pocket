@@ -9,10 +9,10 @@
     <style>
         body {
             font-family: 'Prompt', sans-serif;
-            background: linear-gradient(135deg, #E8F5E8 0%, #F0F8FF 50%, #FFF8DC 100%);
+            background: linear-gradient(135deg, #E3F2FD 0%, #F3E5F5 50%, #E8F5E8 100%);
             background-image: 
-                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23FFB6C1' fill-opacity='0.15'%3E%3Cpath d='M30 30c0-11.046-8.954-20-20-20s-20 8.954-20 20 8.954 20 20 20 20-8.954 20-20zm0 0c0 11.046 8.954 20 20 20s20-8.954 20-20-8.954-20-20-20-20 8.954-20 20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"),
-                url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2398FB98' fill-opacity='0.1'%3E%3Cpath d='M20 20c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10zm10-10c0 5.5 4.5 10 10 10s10-4.5 10-10-4.5-10-10-10-10 4.5-10 10z'/%3E%3C/g%3E%3C/svg%3E");
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234285F4' fill-opacity='0.1'%3E%3Cpath d='M30 30c0-11.046-8.954-20-20-20s-20 8.954-20 20 8.954 20 20 20 20-8.954 20-20zm0 0c0 11.046 8.954 20 20 20s20-8.954 20-20-8.954-20-20-20-20 8.954-20 20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"),
+                url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2334A853' fill-opacity='0.08'%3E%3Cpath d='M20 20c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10zm10-10c0 5.5 4.5 10 10 10s10-4.5 10-10-4.5-10-10-10-10 4.5-10 10z'/%3E%3C/g%3E%3C/svg%3E");
             min-height: 100vh;
         }
         .mothers-day-banner {
@@ -73,13 +73,13 @@
             background-color: rgba(255, 255, 255, 0.5);
             border-radius: 30px;
             overflow: hidden;
-            border: 3px solid #FF9999;
+            border: 3px solid #1976D2;
         }
         .progress-fill {
             position: absolute;
             bottom: 0;
             width: 100%;
-            background: linear-gradient(to top, #FF9999, #FFCCCC);
+            background: linear-gradient(to top, #1976D2, #64B5F6);
             border-radius: 0 0 30px 30px;
             transition: height 0.5s ease-in-out;
         }
@@ -90,9 +90,14 @@
             transform: translateY(-2px);
         }
         .tab-button.active {
-            background-color: #FF9999;
+            background-color: #1976D2;
             color: white;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .nav-button.active {
+            background-color: #E3F2FD;
+            color: #1976D2;
+            font-weight: 600;
         }
         .category-card {
             transition: all 0.3s ease;
@@ -202,8 +207,21 @@
         
         <!-- Header -->
         <header class="flex justify-between items-center mb-8">
+            <!-- Hamburger Menu -->
             <div class="flex items-center">
-                <svg class="piggy-bank w-16 h-16 mr-3" viewBox="0 0 512 512" fill="#FF9999">
+                <button id="menu-toggle" class="mr-4 p-2 rounded-lg hover:bg-blue-100 transition duration-300">
+                    <div class="flex flex-col space-y-1">
+                        <div class="w-6 h-0.5 bg-blue-600 transition-all duration-300"></div>
+                        <div class="w-6 h-0.5 bg-blue-600 transition-all duration-300"></div>
+                        <div class="w-6 h-0.5 bg-blue-600 transition-all duration-300"></div>
+                    </div>
+                </button>
+                <span class="text-blue-600 font-medium mr-4">Menu</span>
+            </div>
+            
+            <!-- Logo and Title -->
+            <div class="flex items-center flex-1 justify-center">
+                <svg class="piggy-bank w-12 h-12 mr-3" viewBox="0 0 512 512" fill="#1976D2">
                     <path d="M422,108h-32c-4.4,0-8,3.6-8,8s3.6,8,8,8h32c4.4,0,8-3.6,8-8S426.4,108,422,108z"/>
                     <path d="M78,280c-4.4,0-8,3.6-8,8v32c0,4.4,3.6,8,8,8s8-3.6,8-8v-32C86,283.6,82.4,280,78,280z"/>
                     <path d="M430.4,280.5c-0.2-0.2-0.4-0.3-0.6-0.5H408c-4.4,0-8,3.6-8,8s3.6,8,8,8h8c0,13.2-2.1,25.9-6,37.8l-31.8-5.6
@@ -223,21 +241,77 @@
                     <path d="M286,208h-60c-4.4,0-8,3.6-8,8s3.6,8,8,8h60c4.4,0,8-3.6,8-8S290.4,208,286,208z"/>
                     <path d="M286,176h-60c-4.4,0-8,3.6-8,8s3.6,8,8,8h60c4.4,0,8-3.6,8-8S290.4,176,286,176z"/>
                 </svg>
-                <div>
-                    <h1 class="text-3xl font-bold text-pink-600">Cold Pocket</h1>
-                    <p class="text-pink-500">ออมเงินแบบประหยัด ทันสมัย</p>
+                <div class="text-center">
+                    <h1 class="text-2xl font-bold text-blue-600">Cold Pocket</h1>
+                    <div class="flex items-center text-sm text-blue-500">
+                        <span id="current-datetime" class="mr-2"></span>
+                        <span>•</span>
+                        <span class="ml-2">ออมเงินแบบประหยัด</span>
+                    </div>
                 </div>
             </div>
+            
+            <!-- Total Savings -->
             <div class="text-right">
-                <p class="text-lg font-bold text-pink-600">ยอดเงินออมทั้งหมด</p>
-                <p id="total-savings" class="text-2xl font-bold text-pink-700">฿0</p>
+                <p class="text-sm font-medium text-blue-600">ยอดเงินออมทั้งหมด</p>
+                <p id="total-savings" class="text-xl font-bold text-blue-700">฿0</p>
             </div>
         </header>
 
         <!-- Main Content -->
         <main>
-            <!-- Tabs -->
-            <div class="flex mb-6 bg-white rounded-full p-1 shadow-md">
+            <!-- Mobile Navigation Menu -->
+            <div id="mobile-menu" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+                <div class="fixed left-0 top-0 h-full w-80 bg-white shadow-lg transform -translate-x-full transition-transform duration-300" id="menu-sidebar">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-xl font-bold text-blue-600">เมนู</h2>
+                            <button id="menu-close" class="p-2 hover:bg-gray-100 rounded-lg">
+                                <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <nav class="space-y-2">
+                            <button id="nav-home" class="nav-button active w-full flex items-center p-3 rounded-lg hover:bg-blue-50 transition duration-300">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                                </svg>
+                                หน้าหลัก
+                            </button>
+                            <button id="nav-history" class="nav-button w-full flex items-center p-3 rounded-lg hover:bg-blue-50 transition duration-300">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                </svg>
+                                ประวัติการออม
+                            </button>
+                            <button id="nav-categories" class="nav-button w-full flex items-center p-3 rounded-lg hover:bg-blue-50 transition duration-300">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14-7H5a2 2 0 00-2 2v14c0 1.1.9 2 2 2h14a2 2 0 002-2V6a2 2 0 00-2-2z"></path>
+                                </svg>
+                                หมวดหมู่
+                            </button>
+                            <button id="nav-goals" class="nav-button w-full flex items-center p-3 rounded-lg hover:bg-blue-50 transition duration-300">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                                </svg>
+                                เป้าหมาย
+                            </button>
+                            <hr class="my-4">
+                            <button id="nav-settings" class="nav-button w-full flex items-center p-3 rounded-lg hover:bg-blue-50 transition duration-300">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                                ตั้งค่า
+                            </button>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Desktop Tabs (hidden on mobile) -->
+            <div id="desktop-tabs" class="hidden md:flex mb-6 bg-white rounded-full p-1 shadow-md">
                 <button id="tab-home" class="tab-button active flex-1 py-2 px-4 rounded-full text-center font-medium flex items-center justify-center">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
@@ -274,23 +348,23 @@
             <div id="home-content" class="tab-content bg-white rounded-2xl p-6 shadow-lg">
                 <div class="flex flex-col md:flex-row gap-6">
                     <div class="flex-1">
-                        <h2 class="text-xl font-bold text-pink-600 mb-4">เพิ่มการออมเงิน</h2>
-                        <div class="bg-pink-50 rounded-xl p-4 mb-4">
+                        <h2 class="text-xl font-bold text-blue-600 mb-4">เพิ่มการออมเงิน</h2>
+                        <div class="bg-blue-50 rounded-xl p-4 mb-4">
                             <div class="mb-4">
-                                <label class="block text-pink-700 mb-2">จำนวนเงิน (บาท)</label>
-                                <input id="amount-input" type="number" class="w-full px-4 py-2 rounded-lg border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-500" placeholder="0.00">
+                                <label class="block text-blue-700 mb-2">จำนวนเงิน (บาท)</label>
+                                <input id="amount-input" type="number" class="w-full px-4 py-2 rounded-lg border border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="0.00">
                             </div>
                             <div class="mb-4">
-                                <label class="block text-pink-700 mb-2">หมวดหมู่</label>
-                                <select id="category-select" class="w-full px-4 py-2 rounded-lg border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-500">
+                                <label class="block text-blue-700 mb-2">หมวดหมู่</label>
+                                <select id="category-select" class="w-full px-4 py-2 rounded-lg border border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
                                     <option value="อื่นๆ">อื่นๆ</option>
                                 </select>
                             </div>
                             <div class="mb-4">
-                                <label class="block text-pink-700 mb-2">หมายเหตุ (ไม่บังคับ)</label>
-                                <input id="note-input" type="text" class="w-full px-4 py-2 rounded-lg border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-500" placeholder="บันทึกเพิ่มเติม...">
+                                <label class="block text-blue-700 mb-2">หมายเหตุ (ไม่บังคับ)</label>
+                                <input id="note-input" type="text" class="w-full px-4 py-2 rounded-lg border border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="บันทึกเพิ่มเติม...">
                             </div>
-                            <button id="save-button" class="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-4 rounded-lg transition duration-300 flex items-center justify-center disabled-feature">
+                            <button id="save-button" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg transition duration-300 flex items-center justify-center disabled-feature">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                                 </svg>
@@ -298,8 +372,8 @@
                             </button>
                         </div>
                         
-                        <div class="bg-pink-50 rounded-xl p-4">
-                            <h3 class="text-lg font-bold text-pink-600 mb-3">การออมล่าสุด</h3>
+                        <div class="bg-blue-50 rounded-xl p-4">
+                            <h3 class="text-lg font-bold text-blue-600 mb-3">การออมล่าสุด</h3>
                             <div id="recent-savings" class="space-y-3">
                                 <div class="text-center text-gray-500 py-4">ยังไม่มีรายการออมเงิน</div>
                             </div>
@@ -308,7 +382,7 @@
                     
                     <div class="flex-1 flex flex-col items-center">
                         <div class="flex justify-between items-center w-full mb-4">
-                            <h2 class="text-xl font-bold text-pink-600">เป้าหมายการออม</h2>
+                            <h2 class="text-xl font-bold text-blue-600">เป้าหมายการออม</h2>
                             <button id="goal-settings-button" class="settings-btn bg-gray-200 hover:bg-gray-300 text-gray-700 p-2 rounded-full transition duration-300">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
@@ -374,11 +448,11 @@
                 </div>
                 
                 <div class="mb-4 flex gap-2">
-                    <select id="filter-category" class="px-4 py-2 rounded-lg border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-500">
+                    <select id="filter-category" class="px-4 py-2 rounded-lg border border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <option value="all">ทุกหมวดหมู่</option>
                         <option value="อื่นๆ">อื่นๆ</option>
                     </select>
-                    <select id="filter-date" class="px-4 py-2 rounded-lg border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-500">
+                    <select id="filter-date" class="px-4 py-2 rounded-lg border border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <option value="all">ทุกช่วงเวลา</option>
                         <option value="today">วันนี้</option>
                         <option value="week">สัปดาห์นี้</option>
@@ -386,8 +460,8 @@
                         <option value="year">ปีนี้</option>
                     </select>
                 </div>
-                <div class="bg-pink-50 rounded-xl p-4">
-                    <div id="history-list" class="divide-y divide-pink-200">
+                <div class="bg-blue-50 rounded-xl p-4">
+                    <div id="history-list" class="divide-y divide-blue-200">
                         <div class="text-center text-gray-500 py-4">ยังไม่มีประวัติการออมเงิน</div>
                     </div>
                 </div>
@@ -624,19 +698,29 @@
             </div>
             
             <div class="border-t border-gray-200 pt-4 mb-4">
-                <h3 class="font-bold text-pink-600 mb-3">เลือกธีมประจำวัน</h3>
+                <h3 class="font-bold text-blue-600 mb-3">โหมดการแสดงผล</h3>
                 <div class="mb-4">
-                    <label class="block text-pink-700 mb-2 text-sm">เลือกธีมที่ต้องการแสดง</label>
-                    <select id="theme-selector" class="w-full px-3 py-2 rounded-lg border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-500 text-sm">
-                        <option value="auto">อัตโนมัติ (ตามวันปัจจุบัน)</option>
-                        <option value="0">วันอาทิตย์ - แสงแรกแห่งสัปดาห์ ☀️</option>
-                        <option value="1">วันจันทร์ - เริ่มต้นใหม่ 💪</option>
-                        <option value="2">วันอังคาร - วันแห่งความมุ่งมั่น 🔥</option>
-                        <option value="3">วันพุธ - วันแห่งความสมดุล ⚖️</option>
-                        <option value="4">วันพฤหัสบดี - วันแห่งความเจริญ 🌟</option>
-                        <option value="5">วันศุกร์ - วันแห่งความสุข 🎉</option>
-                        <option value="6">วันเสาร์ - วันแห่งการพักผ่อน 🌈</option>
+                    <label class="block text-blue-700 mb-2 text-sm">เลือกโหมดการใช้งาน</label>
+                    <select id="device-mode-selector" class="w-full px-3 py-2 rounded-lg border border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                        <option value="auto">อัตโนมัติ (ตามขนาดหน้าจอ)</option>
+                        <option value="mobile">โทรศัพท์มือถือ</option>
+                        <option value="desktop">คอมพิวเตอร์/แท็บเล็ต</option>
                     </select>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-200 pt-4 mb-4">
+                <h3 class="font-bold text-blue-600 mb-3">ธีมประจำวัน</h3>
+                <div class="mb-4">
+                    <label class="block text-blue-700 mb-2 text-sm">ระบบจะเปลี่ยนธีมอัตโนมัติตามวันปัจจุบัน</label>
+                    <div class="bg-blue-50 p-3 rounded-lg">
+                        <div class="flex items-center text-sm text-blue-600">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span>ธีมจะเปลี่ยนแปลงอัตโนมัติทุกวันตามวันในสัปดาห์ และวันสำคัญต่างๆ</span>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -708,6 +792,7 @@
         let appStatus = localStorage.getItem('coldPocketAppStatus') !== 'offline';
         let customCategories = JSON.parse(localStorage.getItem('coldPocketCustomCategories')) || [];
         let selectedTheme = localStorage.getItem('coldPocketSelectedTheme') || 'auto';
+        let deviceMode = localStorage.getItem('coldPocketDeviceMode') || 'auto';
         
         // Daily themes data
         const dailyThemes = {
@@ -827,7 +912,14 @@
         const appStatusText = document.getElementById('app-status-text');
         const statusIndicator = document.getElementById('status-indicator');
         const themeSelector = document.getElementById('theme-selector');
+        const deviceModeSelector = document.getElementById('device-mode-selector');
         const successToast = document.getElementById('success-toast');
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuSidebar = document.getElementById('menu-sidebar');
+        const menuClose = document.getElementById('menu-close');
+        const currentDatetime = document.getElementById('current-datetime');
+        const navButtons = document.querySelectorAll('.nav-button');
         const toastMessage = document.getElementById('toast-message');
         const noGoalElement = document.getElementById('no-goal');
         const activeGoalElement = document.getElementById('active-goal');
@@ -1006,12 +1098,72 @@
             showToast(appStatus ? 'แอปพลิเคชันอยู่ในโหมดออนไลน์' : 'แอปพลิเคชันอยู่ในโหมดออฟไลน์');
         });
         
-        // Theme selector
-        themeSelector.addEventListener('change', () => {
-            selectedTheme = themeSelector.value;
-            localStorage.setItem('coldPocketSelectedTheme', selectedTheme);
-            updateDailyTheme();
-            showToast('เปลี่ยนธีมสำเร็จ');
+        // Theme selector (removed - now automatic)
+        
+        // Device mode selector
+        deviceModeSelector.addEventListener('change', () => {
+            deviceMode = deviceModeSelector.value;
+            localStorage.setItem('coldPocketDeviceMode', deviceMode);
+            updateDeviceMode();
+            showToast('เปลี่ยนโหมดการแสดงผลสำเร็จ');
+        });
+        
+        // Menu functionality
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.remove('hidden');
+            setTimeout(() => {
+                menuSidebar.classList.remove('-translate-x-full');
+            }, 10);
+        });
+        
+        menuClose.addEventListener('click', closeMenu);
+        
+        mobileMenu.addEventListener('click', (e) => {
+            if (e.target === mobileMenu) {
+                closeMenu();
+            }
+        });
+        
+        // Navigation buttons
+        navButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.id.replace('nav-', '');
+                
+                if (tabId === 'settings') {
+                    settingsModal.classList.remove('hidden');
+                    closeMenu();
+                    return;
+                }
+                
+                // Update nav button states
+                navButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Update tab button states
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                const correspondingTab = document.getElementById(`tab-${tabId}`);
+                if (correspondingTab) {
+                    correspondingTab.classList.add('active');
+                }
+                
+                // Show corresponding content
+                tabContents.forEach(content => {
+                    content.classList.add('hidden');
+                });
+                document.getElementById(`${tabId}-content`).classList.remove('hidden');
+                
+                // Update content when switching tabs
+                if (tabId === 'history') {
+                    updateHistoryList();
+                    updateDailyChart();
+                } else if (tabId === 'categories') {
+                    updateCategoryStats();
+                } else if (tabId === 'goals') {
+                    updateGoalsList();
+                }
+                
+                closeMenu();
+            });
         });
         
         // Category modal events
@@ -1173,6 +1325,43 @@
         });
         
         // Helper functions
+        function updateCurrentDateTime() {
+            const now = new Date();
+            const options = {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            const thaiDateTime = now.toLocaleDateString('th-TH', options);
+            currentDatetime.textContent = thaiDateTime;
+        }
+        
+        function closeMenu() {
+            menuSidebar.classList.add('-translate-x-full');
+            setTimeout(() => {
+                mobileMenu.classList.add('hidden');
+            }, 300);
+        }
+        
+        function updateDeviceMode() {
+            const desktopTabs = document.getElementById('desktop-tabs');
+            
+            if (deviceMode === 'mobile') {
+                desktopTabs.classList.add('hidden');
+                desktopTabs.classList.remove('md:flex');
+            } else if (deviceMode === 'desktop') {
+                desktopTabs.classList.remove('hidden');
+                desktopTabs.classList.add('flex');
+                desktopTabs.classList.remove('md:flex');
+            } else { // auto
+                desktopTabs.classList.remove('hidden', 'flex');
+                desktopTabs.classList.add('md:flex');
+            }
+        }
+        
         function updateDailyTheme() {
             const now = new Date();
             const dayOfWeek = now.getDay();
@@ -1180,19 +1369,13 @@
             const day = now.getDate().toString().padStart(2, '0');
             const dateKey = `${month}-${day}`;
             
-            // Determine which theme to use
+            // Always use automatic theme selection
             let currentTheme;
-            if (selectedTheme === 'auto') {
-                // Check for special themes first
-                if (specialThemes[dateKey]) {
-                    currentTheme = specialThemes[dateKey];
-                } else {
-                    currentTheme = dailyThemes[dayOfWeek];
-                }
+            // Check for special themes first
+            if (specialThemes[dateKey]) {
+                currentTheme = specialThemes[dateKey];
             } else {
-                // Use selected theme
-                const themeIndex = parseInt(selectedTheme);
-                currentTheme = dailyThemes[themeIndex];
+                currentTheme = dailyThemes[dayOfWeek];
             }
             
             // Update theme elements
@@ -1817,13 +2000,18 @@
         }
         
         // Initialize the app
-        themeSelector.value = selectedTheme;
+        deviceModeSelector.value = deviceMode;
+        updateDeviceMode();
+        updateCurrentDateTime();
         updateDailyTheme();
         updateTotalSavings();
         updateRecentSavings();
         updateGoalProgress();
         updateCategorySelects();
         updateDailyChart();
+        
+        // Update datetime every minute
+        setInterval(updateCurrentDateTime, 60000);
         
         // Set current update time
         const now = new Date();
@@ -1848,5 +2036,5 @@
             }
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96e9ab79168c7329',t:'MTc1NTEwMzM4OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9709a95712d54f5d',t:'MTc1NTQzODg0Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
