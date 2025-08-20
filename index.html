@@ -291,37 +291,252 @@
 
         // ตรวจสอบสถานะออนไลน์/ออฟไลน์
         function checkOnlineFeatures() {
-            const cloudSection = document.querySelector('.gradient-bg');
-            const chartSection = document.getElementById('graph-page');
+            const mainContainer = document.querySelector('.max-w-md.mx-auto.pb-20.pt-4');
             
             if (!isOnlineMode) {
-                // ปิดการใช้งานฟีเจอร์ออนไลน์
-                if (cloudSection) {
-                    cloudSection.style.opacity = '0.5';
-                    cloudSection.style.pointerEvents = 'none';
+                // ปิดการใช้งานทั้งหมดยกเว้นเมนู
+                if (mainContainer) {
+                    mainContainer.innerHTML = `
+                        <div class="px-4">
+                            <div class="bg-red-50 border border-red-200 rounded-2xl p-8 text-center card-shadow">
+                                <div class="text-6xl mb-4">📱</div>
+                                <h2 class="text-xl font-bold text-red-600 mb-2">โหมดออฟไลน์</h2>
+                                <p class="text-gray-600 mb-4">ระบบไม่สามารถทำงานได้ในโหมดออฟไลน์</p>
+                                <p class="text-sm text-gray-500 mb-6">กรุณาเปิดโหมดออนไลน์ในหน้าตั้งค่าเพื่อใช้งานแอป</p>
+                                <button onclick="goToSettingsAndEnableOnline()" class="gradient-bg text-white px-6 py-3 rounded-lg font-medium hover:opacity-90 transition-opacity">
+                                    ⚙️ ไปที่ตั้งค่า
+                                </button>
+                            </div>
+                        </div>
+                    `;
                 }
                 
                 // แสดงข้อความแจ้งเตือน
                 showOfflineWarning();
             } else {
-                if (cloudSection) {
-                    cloudSection.style.opacity = '1';
-                    cloudSection.style.pointerEvents = 'auto';
-                }
+                // กู้คืนเนื้อหาเดิม
+                restoreOriginalContent();
             }
         }
 
         // แสดงข้อความแจ้งเตือนออฟไลน์
         function showOfflineWarning() {
             const warning = document.createElement('div');
-            warning.className = 'fixed top-16 left-1/2 transform -translate-x-1/2 bg-orange-500 text-white px-4 py-2 rounded-lg shadow-lg z-40 text-sm';
-            warning.textContent = '⚠️ โหมดออฟไลน์: บางฟีเจอร์อาจไม่ทำงาน';
+            warning.className = 'fixed top-16 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg z-40 text-sm';
+            warning.textContent = '🚫 โหมดออฟไลน์: ระบบไม่ทำงาน';
             
             document.body.appendChild(warning);
             
             setTimeout(() => {
                 warning.remove();
             }, 5000);
+        }
+
+        // กู้คืนเนื้อหาเดิม
+        function restoreOriginalContent() {
+            const mainContainer = document.querySelector('.max-w-md.mx-auto.pb-20.pt-4');
+            if (mainContainer) {
+                mainContainer.innerHTML = `
+                    <!-- หน้าหลัก -->
+                    <div id="home-page" class="page px-4">
+                        <!-- ยอดเงินออมทั้งหมด -->
+                        <div class="gradient-bg text-white rounded-2xl p-6 mb-6 card-shadow">
+                            <h2 class="text-lg font-medium mb-2">ยอดเงินออมทั้งหมด</h2>
+                            <div class="text-3xl font-bold" id="totalSavings">฿0</div>
+                            <div class="text-sm opacity-80 mt-1">อัพเดทล่าสุด: <span id="lastUpdate">วันนี้</span></div>
+                        </div>
+
+                        <!-- ฟอร์มออมเงิน -->
+                        <div class="bg-white rounded-2xl p-6 card-shadow">
+                            <h3 class="text-lg font-semibold mb-4 text-gray-800">เพิ่มการออมเงิน</h3>
+                            
+                            <form id="savingsForm" class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">จำนวนเงิน (บาท)</label>
+                                    <input type="number" id="amount" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="0" required>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">หมวดหมู่</label>
+                                    <select id="category" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" required>
+                                        <option value="">เลือกหมวดหมู่</option>
+                                        <option value="เงินเดือน">💼 เงินเดือน</option>
+                                        <option value="เงินพิเศษ">💰 เงินพิเศษ</option>
+                                        <option value="ขายของ">🛍️ ขายของ</option>
+                                        <option value="ลงทุน">📈 ลงทุน</option>
+                                        <option value="อื่นๆ">📝 อื่นๆ</option>
+                                    </select>
+                                </div>
+                                
+                                <button type="submit" class="w-full gradient-bg text-white py-3 rounded-lg font-medium hover:opacity-90 transition-opacity">
+                                    ✅ บันทึกการออม
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- รายการออมล่าสุด -->
+                        <div class="bg-white rounded-2xl p-6 mt-6 card-shadow">
+                            <h3 class="text-lg font-semibold mb-4 text-gray-800">รายการออมล่าสุด</h3>
+                            <div id="recentSavings" class="space-y-3">
+                                <div class="text-gray-500 text-center py-4">ยังไม่มีรายการออม</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- หน้ากราฟ -->
+                    <div id="graph-page" class="page px-4 hidden">
+                        <div class="bg-white rounded-2xl p-6 card-shadow mb-6">
+                            <h2 class="text-lg font-semibold mb-4 text-gray-800">📊 กราฟการออมเงิน</h2>
+                            
+                            <!-- ปุ่มเลือกช่วงเวลา -->
+                            <div class="flex space-x-2 mb-6">
+                                <button onclick="changeChartPeriod('day')" class="period-btn px-4 py-2 rounded-lg bg-purple-600 text-white text-sm font-medium" id="day-btn">รายวัน</button>
+                                <button onclick="changeChartPeriod('week')" class="period-btn px-4 py-2 rounded-lg bg-gray-200 text-gray-700 text-sm font-medium" id="week-btn">รายสัปดาห์</button>
+                                <button onclick="changeChartPeriod('month')" class="period-btn px-4 py-2 rounded-lg bg-gray-200 text-gray-700 text-sm font-medium" id="month-btn">รายเดือน</button>
+                            </div>
+                            
+                            <div class="h-64">
+                                <canvas id="savingsChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- สถิติการออม -->
+                        <div class="bg-white rounded-2xl p-6 card-shadow">
+                            <h3 class="text-lg font-semibold mb-4 text-gray-800">📈 สถิติการออม</h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="text-center p-4 bg-green-50 rounded-lg">
+                                    <div class="text-2xl font-bold text-green-600" id="avgDaily">฿0</div>
+                                    <div class="text-sm text-gray-600">เฉลี่ยต่อวัน</div>
+                                </div>
+                                <div class="text-center p-4 bg-blue-50 rounded-lg">
+                                    <div class="text-2xl font-bold text-blue-600" id="thisMonth">฿0</div>
+                                    <div class="text-sm text-gray-600">เดือนนี้</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- หน้าเป้าหมาย -->
+                    <div id="goals-page" class="page px-4 hidden">
+                        <div class="bg-white rounded-2xl p-6 card-shadow mb-6">
+                            <h2 class="text-lg font-semibold mb-4 text-gray-800">🎯 เป้าหมายการออม</h2>
+                            
+                            <!-- Cloud Pocket -->
+                            <div class="gradient-bg text-white rounded-xl p-4 mb-6">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h3 class="font-semibold">☁️ Cloud Pocket</h3>
+                                        <p class="text-sm opacity-80">เป้าหมายออมเงินออนไลน์</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-xl font-bold" id="cloudProgress">฿0</div>
+                                        <div class="text-xs opacity-80">จาก ฿10,000</div>
+                                    </div>
+                                </div>
+                                <div class="mt-3 bg-white bg-opacity-20 rounded-full h-2">
+                                    <div class="bg-white rounded-full h-2 transition-all duration-300" id="cloudProgressBar" style="width: 0%"></div>
+                                </div>
+                            </div>
+
+                            <!-- เพิ่มเป้าหมายใหม่ -->
+                            <form id="goalForm" class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">ชื่อเป้าหมาย</label>
+                                    <input type="text" id="goalName" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="เช่น ซื้อโทรศัพท์ใหม่" required>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">จำนวนเงินเป้าหมาย (บาท)</label>
+                                    <input type="number" id="goalAmount" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="0" required>
+                                </div>
+                                
+                                <button type="submit" class="w-full gradient-bg text-white py-3 rounded-lg font-medium hover:opacity-90 transition-opacity">
+                                    ➕ เพิ่มเป้าหมาย
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- รายการเป้าหมาย -->
+                        <div class="bg-white rounded-2xl p-6 card-shadow">
+                            <h3 class="text-lg font-semibold mb-4 text-gray-800">📋 เป้าหมายทั้งหมด</h3>
+                            <div id="goalsList" class="space-y-4">
+                                <div class="text-gray-500 text-center py-4">ยังไม่มีเป้าหมาย</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- หน้าตั้งค่า -->
+                    <div id="settings-page" class="page px-4 hidden">
+                        <div class="bg-white rounded-2xl p-6 card-shadow mb-6">
+                            <h2 class="text-lg font-semibold mb-6 text-gray-800">⚙️ ตั้งค่า</h2>
+                            
+                            <!-- สวิทช์ออนไลน์/ออฟไลน์ -->
+                            <div class="flex items-center justify-between py-4 border-b border-gray-100">
+                                <div>
+                                    <h3 class="font-medium text-gray-800">โหมดออนไลน์</h3>
+                                    <p class="text-sm text-gray-500">เชื่อมต่อกับ Cloud Pocket</p>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" id="onlineSwitch" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+
+                            <!-- สถานะการเชื่อมต่อ -->
+                            <div class="py-4 border-b border-gray-100">
+                                <div class="flex items-center">
+                                    <div class="w-3 h-3 bg-green-500 rounded-full mr-3" id="connectionStatus"></div>
+                                    <span class="text-sm" id="connectionText">เชื่อมต่อแล้ว</span>
+                                </div>
+                            </div>
+
+                            <!-- ธีมสีประจำวัน -->
+                            <div class="py-4 border-b border-gray-100">
+                                <h3 class="font-medium text-gray-800 mb-2">🎨 ธีมสีประจำวัน</h3>
+                                <div class="flex items-center">
+                                    <div class="w-4 h-4 rounded-full mr-3" style="background: var(--primary-color)"></div>
+                                    <span class="text-sm text-gray-600" id="currentTheme">กำลังโหลด...</span>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-1">ธีมสีเปลี่ยนอัตโนมัติทุกวัน</p>
+                            </div>
+
+                            <!-- เวอร์ชั่น -->
+                            <div class="py-4">
+                                <h3 class="font-medium text-gray-800 mb-2">เวอร์ชั่นปัจจุบัน</h3>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-gray-600">v2.2.0</span>
+                                    <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">ล่าสุด</span>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-1" id="updateDate">อัพเดทล่าสุด: วันนี้</p>
+                            </div>
+                        </div>
+
+                        <!-- ข้อมูลแอป -->
+                        <div class="bg-white rounded-2xl p-6 card-shadow">
+                            <h3 class="text-lg font-semibold mb-4 text-gray-800">📱 เกี่ยวกับแอป</h3>
+                            <div class="space-y-3 text-sm text-gray-600">
+                                <p>💰 แอปออมเงินที่ช่วยให้คุณติดตามการออมได้อย่างง่ายดาย</p>
+                                <p>📊 ดูกราฟและสถิติการออมแบบเรียลไทม์</p>
+                                <p>🎯 ตั้งเป้าหมายและติดตามความคืบหน้า</p>
+                                <p>☁️ ซิงค์ข้อมูลกับ Cloud Pocket</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // รีเซ็ต event listeners
+                setupEventListeners();
+                
+                // อัพเดทข้อมูล
+                updateTotalSavings();
+                updateRecentSavings();
+                updateCloudProgress();
+                updateGoalsDisplay();
+                
+                // แสดงหน้าปัจจุบัน
+                const currentPage = document.querySelector('.nav-btn.text-purple-600').id.replace('nav-', '');
+                showPage(currentPage);
+            }
         }
 
         // อัพเดทเวลาปัจจุบัน
@@ -367,41 +582,7 @@
             }
         }
 
-        // บันทึกการออม
-        document.getElementById('savingsForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const amount = parseFloat(document.getElementById('amount').value);
-            const category = document.getElementById('category').value;
-            
-            if (amount > 0 && category) {
-                const saving = {
-                    id: Date.now(),
-                    amount: amount,
-                    category: category,
-                    date: new Date().toISOString(),
-                    displayDate: new Date().toLocaleDateString('th-TH')
-                };
-                
-                savingsData.unshift(saving);
-                totalSavings += amount;
-                
-                // บันทึกข้อมูล
-                localStorage.setItem('savingsData', JSON.stringify(savingsData));
-                localStorage.setItem('totalSavings', totalSavings.toString());
-                
-                // อัพเดทหน้าจอ
-                updateTotalSavings();
-                updateRecentSavings();
-                updateCloudProgress();
-                
-                // รีเซ็ตฟอร์ม
-                document.getElementById('savingsForm').reset();
-                
-                // แสดงข้อความสำเร็จ
-                showSuccessMessage('บันทึกการออมเรียบร้อย! 🎉');
-            }
-        });
+
 
         // อัพเดทยอดเงินออมทั้งหมด
         function updateTotalSavings() {
@@ -581,31 +762,7 @@
             document.getElementById('thisMonth').textContent = '฿' + thisMonthTotal.toLocaleString();
         }
 
-        // เพิ่มเป้าหมาย
-        document.getElementById('goalForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const name = document.getElementById('goalName').value;
-            const amount = parseFloat(document.getElementById('goalAmount').value);
-            
-            if (name && amount > 0) {
-                const goal = {
-                    id: Date.now(),
-                    name: name,
-                    targetAmount: amount,
-                    currentAmount: 0,
-                    createdDate: new Date().toISOString()
-                };
-                
-                goalsData.push(goal);
-                localStorage.setItem('goalsData', JSON.stringify(goalsData));
-                
-                updateGoalsDisplay();
-                document.getElementById('goalForm').reset();
-                
-                showSuccessMessage('เพิ่มเป้าหมายเรียบร้อย! 🎯');
-            }
-        });
+
 
         // อัพเดทการแสดงเป้าหมาย
         function updateGoalsDisplay() {
@@ -655,26 +812,7 @@
             document.getElementById('cloudProgressBar').style.width = progress + '%';
         }
 
-        // สวิทช์ออนไลน์/ออฟไลน์
-        document.getElementById('onlineSwitch').addEventListener('change', function() {
-            isOnlineMode = this.checked;
-            localStorage.setItem('isOnlineMode', JSON.stringify(isOnlineMode));
-            
-            const statusDot = document.getElementById('connectionStatus');
-            const statusText = document.getElementById('connectionText');
-            
-            if (isOnlineMode) {
-                statusDot.className = 'w-3 h-3 bg-green-500 rounded-full mr-3';
-                statusText.textContent = 'เชื่อมต่อแล้ว';
-                showSuccessMessage('เปิดโหมดออนไลน์แล้ว! 🌐');
-            } else {
-                statusDot.className = 'w-3 h-3 bg-red-500 rounded-full mr-3';
-                statusText.textContent = 'ออฟไลน์';
-                showSuccessMessage('เปลี่ยนเป็นโหมดออฟไลน์ 📱');
-            }
-            
-            checkOnlineFeatures();
-        });
+
 
         // แสดงข้อความสำเร็จ
         function showSuccessMessage(message) {
@@ -687,6 +825,126 @@
             setTimeout(() => {
                 toast.remove();
             }, 3000);
+        }
+
+        // ตั้งค่า event listeners
+        function setupEventListeners() {
+            // บันทึกการออม
+            const savingsForm = document.getElementById('savingsForm');
+            if (savingsForm) {
+                savingsForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const amount = parseFloat(document.getElementById('amount').value);
+                    const category = document.getElementById('category').value;
+                    
+                    if (amount > 0 && category) {
+                        const saving = {
+                            id: Date.now(),
+                            amount: amount,
+                            category: category,
+                            date: new Date().toISOString(),
+                            displayDate: new Date().toLocaleDateString('th-TH')
+                        };
+                        
+                        savingsData.unshift(saving);
+                        totalSavings += amount;
+                        
+                        // บันทึกข้อมูล
+                        localStorage.setItem('savingsData', JSON.stringify(savingsData));
+                        localStorage.setItem('totalSavings', totalSavings.toString());
+                        
+                        // อัพเดทหน้าจอ
+                        updateTotalSavings();
+                        updateRecentSavings();
+                        updateCloudProgress();
+                        
+                        // รีเซ็ตฟอร์ม
+                        document.getElementById('savingsForm').reset();
+                        
+                        // แสดงข้อความสำเร็จ
+                        showSuccessMessage('บันทึกการออมเรียบร้อย! 🎉');
+                    }
+                });
+            }
+
+            // เพิ่มเป้าหมาย
+            const goalForm = document.getElementById('goalForm');
+            if (goalForm) {
+                goalForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const name = document.getElementById('goalName').value;
+                    const amount = parseFloat(document.getElementById('goalAmount').value);
+                    
+                    if (name && amount > 0) {
+                        const goal = {
+                            id: Date.now(),
+                            name: name,
+                            targetAmount: amount,
+                            currentAmount: 0,
+                            createdDate: new Date().toISOString()
+                        };
+                        
+                        goalsData.push(goal);
+                        localStorage.setItem('goalsData', JSON.stringify(goalsData));
+                        
+                        updateGoalsDisplay();
+                        document.getElementById('goalForm').reset();
+                        
+                        showSuccessMessage('เพิ่มเป้าหมายเรียบร้อย! 🎯');
+                    }
+                });
+            }
+
+            // สวิทช์ออนไลน์/ออฟไลน์
+            const onlineSwitch = document.getElementById('onlineSwitch');
+            if (onlineSwitch) {
+                onlineSwitch.addEventListener('change', function() {
+                    isOnlineMode = this.checked;
+                    localStorage.setItem('isOnlineMode', JSON.stringify(isOnlineMode));
+                    
+                    const statusDot = document.getElementById('connectionStatus');
+                    const statusText = document.getElementById('connectionText');
+                    
+                    if (isOnlineMode) {
+                        statusDot.className = 'w-3 h-3 bg-green-500 rounded-full mr-3';
+                        statusText.textContent = 'เชื่อมต่อแล้ว';
+                        showSuccessMessage('เปิดโหมดออนไลน์แล้ว! 🌐');
+                    } else {
+                        statusDot.className = 'w-3 h-3 bg-red-500 rounded-full mr-3';
+                        statusText.textContent = 'ออฟไลน์';
+                        showSuccessMessage('เปลี่ยนเป็นโหมดออฟไลน์ 📱');
+                    }
+                    
+                    checkOnlineFeatures();
+                });
+            }
+        }
+
+        // ไปที่หน้าตั้งค่าและเปิดโหมดออนไลน์อัตโนมัติ
+        function goToSettingsAndEnableOnline() {
+            // เปิดโหมดออนไลน์อัตโนมัติ
+            isOnlineMode = true;
+            localStorage.setItem('isOnlineMode', JSON.stringify(isOnlineMode));
+            
+            // กู้คืนเนื้อหาเดิม
+            restoreOriginalContent();
+            
+            // ไปที่หน้าตั้งค่า
+            showPage('settings');
+            
+            // อัพเดทสถานะ
+            const onlineSwitch = document.getElementById('onlineSwitch');
+            const statusDot = document.getElementById('connectionStatus');
+            const statusText = document.getElementById('connectionText');
+            
+            if (onlineSwitch) onlineSwitch.checked = true;
+            if (statusDot) statusDot.className = 'w-3 h-3 bg-green-500 rounded-full mr-3';
+            if (statusText) statusText.textContent = 'เชื่อมต่อแล้ว';
+            
+            // แสดงข้อความสำเร็จ
+            showSuccessMessage('เปิดโหมดออนไลน์แล้ว! 🌐');
         }
 
         // เริ่มต้นแอป
@@ -710,6 +968,9 @@
                 statusText.textContent = 'ออฟไลน์';
             }
             
+            // ตั้งค่า event listeners
+            setupEventListeners();
+            
             updateTotalSavings();
             updateRecentSavings();
             updateCloudProgress();
@@ -729,5 +990,5 @@
         // เริ่มแอป
         initApp();
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'971f03bdf356834e',t:'MTc1NTY2Mjc1MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'971f1944d1f1f91e',t:'MTc1NTY2MzYzMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
