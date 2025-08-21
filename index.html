@@ -3,15 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>แอปออมเงิน AI</title>
+    <title>แอปออมเงิน Smart</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&display=swap');
         body { 
-            font-family: 'Inter', sans-serif; 
+            font-family: 'Kanit', sans-serif; 
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            transition: all 0.3s ease;
+        }
+        
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #e2e8f0;
+        }
+        
+        .dark-mode .ai-card {
+            background: rgba(30, 41, 59, 0.9);
+            border: 1px solid rgba(71, 85, 105, 0.3);
+            color: #e2e8f0;
+        }
+        
+        .dark-mode .gradient-bg {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        }
+        
+        .dark-mode .ai-input {
+            background: rgba(30, 41, 59, 0.8);
+            border-color: #475569;
+            color: #e2e8f0;
+        }
+        
+        .dark-mode .ai-input:focus {
+            background: rgba(30, 41, 59, 1);
+            border-color: var(--primary-color);
+        }
+        
+        .dark-mode .text-gray-800 {
+            color: #e2e8f0 !important;
+        }
+        
+        .dark-mode .text-gray-600 {
+            color: #94a3b8 !important;
+        }
+        
+        .dark-mode .text-gray-500 {
+            color: #64748b !important;
+        }
+        
+        .dark-mode .bg-white {
+            background: rgba(30, 41, 59, 0.95) !important;
+        }
+        
+        .dark-mode .border-gray-200 {
+            border-color: #475569 !important;
+        }
+        
+        .dark-mode .bg-gray-50 {
+            background: rgba(51, 65, 85, 0.5) !important;
+        }
+        
+        .dark-mode .bg-blue-50 {
+            background: rgba(30, 58, 138, 0.2) !important;
+        }
+        
+        .dark-mode .ai-stat-card {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(51, 65, 85, 0.9));
+            border: 1px solid rgba(71, 85, 105, 0.3);
         }
         .gradient-bg { 
             background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%); 
@@ -134,7 +195,7 @@
     <!-- Navigation -->
     <nav class="gradient-bg text-white p-4 sticky top-0 z-50 glass-effect">
         <div class="max-w-md mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold tracking-tight">🤖 แอปออมเงิน AI</h1>
+            <h1 class="text-xl font-bold tracking-tight">💰 แอปออมเงิน Smart</h1>
             <div class="text-sm font-medium" id="currentDateTime"></div>
         </div>
     </nav>
@@ -152,7 +213,13 @@
                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
                 </svg>
-                <span class="text-xs mt-1 font-medium">กราฟ AI</span>
+                <span class="text-xs mt-1 font-medium">กราฟ</span>
+            </button>
+            <button onclick="showPage('list')" class="nav-btn flex flex-col items-center p-3 text-gray-400" id="nav-list">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/>
+                </svg>
+                <span class="text-xs mt-1 font-medium">รายการ</span>
             </button>
             <button onclick="showPage('goals')" class="nav-btn flex flex-col items-center p-3 text-gray-400" id="nav-goals">
                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -214,10 +281,14 @@
                 </form>
             </div>
 
-            <!-- รายการออมล่าสุด -->
+
+        </div>
+
+        <!-- หน้ารายการ -->
+        <div id="list-page" class="page px-4 hidden">
             <div class="ai-card p-6 card-shadow">
-                <h3 class="text-lg font-bold mb-4 text-gray-800 tracking-tight">📋 รายการออมล่าสุด</h3>
-                <div id="recentSavings" class="space-y-3">
+                <h2 class="text-lg font-bold mb-4 text-gray-800 tracking-tight">📋 รายการออมทั้งหมด</h2>
+                <div id="allSavings" class="space-y-3">
                     <div class="text-gray-500 text-center py-4 font-medium">ยังไม่มีรายการออม</div>
                 </div>
             </div>
@@ -226,7 +297,7 @@
         <!-- หน้ากราฟ -->
         <div id="graph-page" class="page px-4 hidden">
             <div class="ai-card p-6 card-shadow mb-6">
-                <h2 class="text-lg font-bold mb-4 text-gray-800 tracking-tight">📊 กราฟการออม AI</h2>
+                <h2 class="text-lg font-bold mb-4 text-gray-800 tracking-tight">📊 กราฟการออม</h2>
                 
                 <!-- ปุ่มเลือกช่วงเวลา -->
                 <div class="flex space-x-2 mb-6">
@@ -242,7 +313,7 @@
 
             <!-- สถิติการออม -->
             <div class="ai-card p-6 card-shadow">
-                <h3 class="text-lg font-bold mb-4 text-gray-800 tracking-tight">📈 สถิติการออม AI</h3>
+                <h3 class="text-lg font-bold mb-4 text-gray-800 tracking-tight">📈 สถิติการออม</h3>
                 <div class="grid grid-cols-2 gap-4">
                     <div class="ai-stat-card text-center p-4">
                         <div class="text-2xl font-bold text-green-600" id="avgDaily">฿0</div>
@@ -265,8 +336,8 @@
                 <div class="gradient-bg text-white rounded-2xl p-4 mb-6">
                     <div class="flex items-center justify-between">
                         <div>
-                            <h3 class="font-bold tracking-tight">☁️ Cloud Pocket AI</h3>
-                            <p class="text-sm opacity-90 font-medium">เป้าหมายออมเงินอัจฉริยะ</p>
+                            <h3 class="font-bold tracking-tight">☁️ Cloud Pocket</h3>
+                            <p class="text-sm opacity-90 font-medium">เป้าหมายออมเงินอัตโนมัติ</p>
                         </div>
                         <div class="text-right">
                             <div class="text-xl font-bold tracking-tight" id="cloudProgress">฿0</div>
@@ -313,13 +384,13 @@
         <!-- หน้าตั้งค่า -->
         <div id="settings-page" class="page px-4 hidden">
             <div class="ai-card p-6 card-shadow mb-6">
-                <h2 class="text-lg font-bold mb-6 text-gray-800 tracking-tight">⚙️ ตั้งค่า AI</h2>
+                <h2 class="text-lg font-bold mb-6 text-gray-800 tracking-tight">⚙️ ตั้งค่า</h2>
                 
                 <!-- สวิทช์ออนไลน์/ออฟไลน์ -->
                 <div class="flex items-center justify-between py-4 border-b border-gray-100">
                     <div>
                         <h3 class="font-semibold text-gray-800 tracking-tight">🌐 โหมดออนไลน์</h3>
-                        <p class="text-sm text-gray-500 font-medium">เชื่อมต่อกับ Cloud Pocket AI</p>
+                        <p class="text-sm text-gray-500 font-medium">เชื่อมต่อกับ Cloud Pocket</p>
                     </div>
                     <label class="switch">
                         <input type="checkbox" id="onlineSwitch" checked>
@@ -346,26 +417,26 @@
                             </div>
                         </div>
                         <p class="text-xs text-amber-600 font-medium">• ไม่สามารถซิงค์ข้อมูลกับ Cloud ได้</p>
-                        <p class="text-xs text-amber-600 font-medium">• ฟีเจอร์ AI บางส่วนไม่ทำงาน</p>
+                        <p class="text-xs text-amber-600 font-medium">• ฟีเจอร์บางส่วนไม่ทำงาน</p>
                     </div>
                 </div>
 
                 <!-- ธีมสีประจำวัน -->
                 <div class="py-4 border-b border-gray-100">
-                    <h3 class="font-semibold text-gray-800 mb-2 tracking-tight">🎨 ธีม AI ประจำวัน</h3>
+                    <h3 class="font-semibold text-gray-800 mb-2 tracking-tight">🎨 ธีมประจำวัน</h3>
                     <div class="flex items-center">
                         <div class="w-4 h-4 rounded-full mr-3" style="background: var(--primary-color)"></div>
                         <span class="text-sm text-gray-600 font-medium" id="currentTheme">กำลังโหลด...</span>
                     </div>
-                    <p class="text-xs text-gray-500 mt-1 font-medium">ธีมสีเปลี่ยนอัตโนมัติด้วย AI</p>
+                    <p class="text-xs text-gray-500 mt-1 font-medium">ธีมสีเปลี่ยนอัตโนมัติ</p>
                 </div>
 
                 <!-- เวอร์ชั่น -->
                 <div class="py-4">
                     <h3 class="font-semibold text-gray-800 mb-2 tracking-tight">🚀 เวอร์ชั่นปัจจุบัน</h3>
                     <div class="flex items-center justify-between">
-                        <span class="text-gray-600 font-semibold">v2.3.0</span>
-                        <span class="text-xs bg-green-100 text-green-800 px-3 py-1 rounded-full font-bold">AI Enhanced</span>
+                        <span class="text-gray-600 font-semibold">v2.4.0</span>
+                        <span class="text-xs bg-green-100 text-green-800 px-3 py-1 rounded-full font-bold">Smart Enhanced</span>
                     </div>
                     <p class="text-xs text-gray-500 mt-1 font-medium" id="updateDate">อัพเดทล่าสุด: วันนี้</p>
                 </div>
@@ -373,13 +444,14 @@
 
             <!-- ข้อมูลแอป -->
             <div class="ai-card p-6 card-shadow">
-                <h3 class="text-lg font-bold mb-4 text-gray-800 tracking-tight">🤖 เกี่ยวกับแอป AI</h3>
+                <h3 class="text-lg font-bold mb-4 text-gray-800 tracking-tight">🤖 เกี่ยวกับแอป</h3>
                 <div class="space-y-3 text-sm text-gray-600 font-medium">
-                    <p>💰 แอปออมเงิน AI ที่ช่วยวิเคราะห์การออมอัจฉริยะ</p>
-                    <p>📊 กราฟและสถิติแบบเรียลไทม์ด้วยเทคโนโลยี AI</p>
-                    <p>🎯 ตั้งเป้าหมายและคาดการณ์ความสำเร็จ</p>
-                    <p>☁️ ซิงค์ข้อมูลกับ Cloud Pocket AI</p>
+                    <p>💰 แอปออมเงิน Smart ที่ช่วยวิเคราะห์การออมอัจฉริยะ</p>
+                    <p>📊 กราฟและสถิติแบบเรียลไทม์ด้วยเทคโนโลยีสมัยใหม่</p>
+                    <p>🎯 ตั้งเป้าหมายและติดตามความคืบหน้า</p>
+                    <p>☁️ ซิงค์ข้อมูลกับ Cloud Pocket</p>
                     <p>🔄 ระบบเก็บข้อมูลเก่า/ใหม่แบบถาวร</p>
+                    <p>🌙 Dark Mode อัตโนมัติถนอมสายตา</p>
                 </div>
             </div>
         </div>
@@ -550,6 +622,8 @@
                 updateChart();
             } else if (page === 'goals') {
                 updateGoalsDisplay();
+            } else if (page === 'list') {
+                updateAllSavings();
             }
         }
 
@@ -937,9 +1011,91 @@
             }
         }
 
+        // ระบบ Dark Mode อัตโนมัติ
+        function checkAutoTheme() {
+            const now = new Date();
+            const hour = now.getHours();
+            
+            // 6 โมงเช้า (6) ถึง 1 ทุ่ม (13) = สว่าง
+            // หลัง 1 ทุ่ม (13) หรือก่อน 6 โมงเช้า = มืด
+            const shouldBeDark = hour >= 13 || hour < 6;
+            
+            if (shouldBeDark && !document.body.classList.contains('dark-mode')) {
+                document.body.classList.add('dark-mode');
+                localStorage.setItem('isDarkMode', 'true');
+            } else if (!shouldBeDark && document.body.classList.contains('dark-mode')) {
+                document.body.classList.remove('dark-mode');
+                localStorage.setItem('isDarkMode', 'false');
+            }
+        }
+
+        // อัพเดทรายการออมทั้งหมด
+        function updateAllSavings() {
+            const container = document.getElementById('allSavings');
+            
+            if (savingsData.length === 0) {
+                container.innerHTML = '<div class="text-gray-500 text-center py-4 font-medium">ยังไม่มีรายการออม</div>';
+                return;
+            }
+            
+            // เรียงลำดับจากใหม่ไปเก่า
+            const sortedData = [...savingsData].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            container.innerHTML = sortedData.map(item => `
+                <div class="flex justify-between items-center p-4 bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl border border-gray-100">
+                    <div class="flex-1">
+                        <div class="font-bold text-gray-800">฿${item.amount.toLocaleString()}</div>
+                        <div class="text-sm text-gray-600 font-medium">${item.category}</div>
+                        <div class="text-xs text-gray-500 font-medium">${item.displayDate}</div>
+                    </div>
+                    <button onclick="deleteSaving(${item.id})" class="text-red-500 hover:bg-red-50 p-2 rounded-lg transition-colors">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                        </svg>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // ลบรายการออม
+        function deleteSaving(savingId) {
+            if (!isOnlineMode) {
+                showErrorMessage('ไม่สามารถลบรายการได้ในโหมดออฟไลน์! 📱');
+                return;
+            }
+            
+            if (confirm('คุณต้องการลบรายการนี้หรือไม่?')) {
+                const savingToDelete = savingsData.find(item => item.id === savingId);
+                if (savingToDelete) {
+                    // ลดยอดเงินออมทั้งหมด
+                    totalSavings -= savingToDelete.amount;
+                    
+                    // ลบรายการ
+                    savingsData = savingsData.filter(item => item.id !== savingId);
+                    
+                    // บันทึกข้อมูล
+                    localStorage.setItem('savingsData', JSON.stringify(savingsData));
+                    localStorage.setItem('totalSavings', totalSavings.toString());
+                    
+                    // อัพเดทหน้าจอ
+                    updateTotalSavings();
+                    updateAllSavings();
+                    updateCloudProgress();
+                    updateGoalsInProgress();
+                    
+                    showSuccessMessage('ลบรายการเรียบร้อย! 🗑️');
+                }
+            }
+        }
+
         // เริ่มต้นแอป
         function initApp() {
             setDailyTheme();
+            
+            // ตรวจสอบ Dark Mode อัตโนมัติ
+            checkAutoTheme();
+            // ตรวจสอบทุก 30 วินาที
+            setInterval(checkAutoTheme, 30000);
             
             updateDateTime();
             setInterval(updateDateTime, 60000);
@@ -951,6 +1107,7 @@
             
             updateTotalSavings();
             updateRecentSavings();
+            updateAllSavings();
             updateCloudProgress();
             updateGoalsDisplay();
             
@@ -966,5 +1123,5 @@
         // เริ่มแอป
         initApp();
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'972756baf6ab7337',t:'MTc1NTc1MDAzNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'972bad47f2e17322',t:'MTc1NTc5NTUyNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
