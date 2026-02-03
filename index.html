@@ -1,40 +1,439 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>แอปออมเงิน Smart</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&display=swap');
-        body { 
-            font-family: 'Kanit', sans-serif; 
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            transition: all 0.3s ease;
-        }
+<!doctype html>
+<html lang="th" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>บันทึกรายได้</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    * {
+      font-family: 'Prompt', sans-serif;
+    }
+    .income-card {
+      animation: slideIn 0.3s ease-out;
+    }
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .tab-active {
+      position: relative;
+    }
+    .tab-active::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: currentColor;
+      border-radius: 3px 3px 0 0;
+    }
+    .stat-card {
+      backdrop-filter: blur(10px);
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+ </head>
+ <body class="h-full">
+  <div id="app" class="h-full w-full overflow-auto" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);">
+   <div class="max-w-2xl mx-auto p-4 pb-8"><!-- Header -->
+    <header class="text-center py-6">
+     <h1 id="app-title" class="text-3xl font-bold text-white mb-2">💰 บันทึกรายได้</h1>
+     <p class="text-slate-400 text-sm">ติดตามรายได้ของคุณอย่างง่ายดาย</p>
+    </header><!-- Summary Cards -->
+    <div class="grid grid-cols-3 gap-3 mb-6">
+     <div class="stat-card bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 border border-emerald-500/30 rounded-2xl p-4 text-center">
+      <p class="text-emerald-400 text-xs font-medium mb-1">วันนี้</p>
+      <p id="daily-total" class="text-white font-bold text-lg">฿0</p>
+     </div>
+     <div class="stat-card bg-gradient-to-br from-blue-500/20 to-blue-600/10 border border-blue-500/30 rounded-2xl p-4 text-center">
+      <p class="text-blue-400 text-xs font-medium mb-1">สัปดาห์นี้</p>
+      <p id="weekly-total" class="text-white font-bold text-lg">฿0</p>
+     </div>
+     <div class="stat-card bg-gradient-to-br from-purple-500/20 to-purple-600/10 border border-purple-500/30 rounded-2xl p-4 text-center">
+      <p class="text-purple-400 text-xs font-medium mb-1">เดือนนี้</p>
+      <p id="monthly-total" class="text-white font-bold text-lg">฿0</p>
+     </div>
+    </div><!-- Add Income Form -->
+    <div class="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-5 mb-6">
+     <h2 class="text-white font-semibold mb-4 flex items-center gap-2"><span class="text-2xl">➕</span> เพิ่มรายได้ใหม่</h2>
+     <form id="income-form" class="space-y-4">
+      <div><label for="amount" class="block text-slate-300 text-sm mb-2">จำนวนเงิน</label> <input type="number" id="amount" placeholder="0.00" step="0.01" min="0" required class="w-full bg-slate-900/50 border border-slate-600 rounded-xl px-4 py-3 text-white text-lg placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all">
+      </div>
+      <div><label for="description" class="block text-slate-300 text-sm mb-2">รายละเอียด</label> <input type="text" id="description" placeholder="เช่น เงินเดือน, ค่าจ้าง, โบนัส..." required class="w-full bg-slate-900/50 border border-slate-600 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all">
+      </div>
+      <div><label for="category" class="block text-slate-300 text-sm mb-2">หมวดหมู่</label> <select id="category" required class="w-full bg-slate-900/50 border border-slate-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"> <option value="salary">💼 เงินเดือน</option> <option value="freelance">💻 ฟรีแลนซ์</option> <option value="business">🏪 ธุรกิจ</option> <option value="investment">📈 การลงทุน</option> <option value="bonus">🎁 โบนัส</option> <option value="other">📌 อื่นๆ</option> </select>
+      </div>
+      <div><label for="date" class="block text-slate-300 text-sm mb-2">วันที่</label> <input type="date" id="date" required class="w-full bg-slate-900/50 border border-slate-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all">
+      </div><button type="submit" id="submit-btn" class="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-semibold py-3 px-6 rounded-xl transition-all transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"> บันทึกรายได้ </button>
+     </form>
+     <p id="limit-warning" class="hidden text-amber-400 text-sm mt-3 text-center">⚠️ ถึงขีดจำกัด 999 รายการแล้ว กรุณาลบบางรายการ</p>
+    </div><!-- Filter Tabs -->
+    <div class="flex gap-2 mb-4 bg-slate-800/30 p-1 rounded-xl"><button data-filter="all" class="filter-tab flex-1 py-2 px-4 rounded-lg text-sm font-medium text-white bg-slate-700/50 transition-all">ทั้งหมด</button> <button data-filter="today" class="filter-tab flex-1 py-2 px-4 rounded-lg text-sm font-medium text-slate-400 hover:text-white transition-all">วันนี้</button> <button data-filter="week" class="filter-tab flex-1 py-2 px-4 rounded-lg text-sm font-medium text-slate-400 hover:text-white transition-all">สัปดาห์</button> <button data-filter="month" class="filter-tab flex-1 py-2 px-4 rounded-lg text-sm font-medium text-slate-400 hover:text-white transition-all">เดือน</button>
+    </div><!-- Income List -->
+    <div class="bg-slate-800/50 border border-slate-700/50 rounded-2xl overflow-hidden">
+     <div class="p-4 border-b border-slate-700/50">
+      <h2 class="text-white font-semibold flex items-center gap-2"><span class="text-2xl">📋</span> รายการรายได้ <span id="record-count" class="text-slate-400 text-sm font-normal">(0 รายการ)</span></h2>
+     </div>
+     <div id="income-list" class="divide-y divide-slate-700/30 max-h-96 overflow-y-auto">
+      <div class="p-8 text-center text-slate-500"><span class="text-4xl block mb-2">📭</span> ยังไม่มีรายการรายได้
+      </div>
+     </div>
+    </div><!-- Footer -->
+    <footer class="text-center mt-6 text-slate-500 text-sm">
+     ข้อมูลถูกบันทึกอัตโนมัติใน Canva Sheet
+    </footer>
+   </div><!-- Delete Confirmation Modal -->
+   <div id="delete-modal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
+    <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 max-w-sm w-full">
+     <h3 class="text-white font-semibold text-lg mb-2">🗑️ ยืนยันการลบ</h3>
+     <p class="text-slate-400 mb-6">คุณต้องการลบรายการนี้หรือไม่?</p>
+     <div class="flex gap-3"><button id="cancel-delete" class="flex-1 py-2 px-4 bg-slate-700 hover:bg-slate-600 text-white rounded-xl transition-all">ยกเลิก</button> <button id="confirm-delete" class="flex-1 py-2 px-4 bg-red-500 hover:bg-red-600 text-white rounded-xl transition-all">ลบ</button>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      app_title: '💰 บันทึกรายได้',
+      currency_symbol: '฿',
+      primary_color: '#10b981',
+      secondary_color: '#1e293b',
+      text_color: '#ffffff',
+      accent_color: '#3b82f6',
+      background_color: '#0f172a'
+    };
+
+    let incomeRecords = [];
+    let currentFilter = 'all';
+    let recordToDelete = null;
+
+    const categoryIcons = {
+      salary: '💼',
+      freelance: '💻',
+      business: '🏪',
+      investment: '📈',
+      bonus: '🎁',
+      other: '📌'
+    };
+
+    const categoryNames = {
+      salary: 'เงินเดือน',
+      freelance: 'ฟรีแลนซ์',
+      business: 'ธุรกิจ',
+      investment: 'การลงทุน',
+      bonus: 'โบนัส',
+      other: 'อื่นๆ'
+    };
+
+    // Date helpers
+    function isToday(dateStr) {
+      const today = new Date();
+      const date = new Date(dateStr);
+      return date.toDateString() === today.toDateString();
+    }
+
+    function isThisWeek(dateStr) {
+      const today = new Date();
+      const date = new Date(dateStr);
+      const startOfWeek = new Date(today);
+      startOfWeek.setDate(today.getDate() - today.getDay());
+      startOfWeek.setHours(0, 0, 0, 0);
+      const endOfWeek = new Date(startOfWeek);
+      endOfWeek.setDate(startOfWeek.getDate() + 7);
+      return date >= startOfWeek && date < endOfWeek;
+    }
+
+    function isThisMonth(dateStr) {
+      const today = new Date();
+      const date = new Date(dateStr);
+      return date.getMonth() === today.getMonth() && date.getFullYear() === today.getFullYear();
+    }
+
+    function formatDate(dateStr) {
+      const date = new Date(dateStr);
+      const options = { day: 'numeric', month: 'short', year: 'numeric' };
+      return date.toLocaleDateString('th-TH', options);
+    }
+
+    function formatCurrency(amount, symbol) {
+      return symbol + amount.toLocaleString('th-TH', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+    }
+
+    function calculateTotals(records, currencySymbol) {
+      let daily = 0, weekly = 0, monthly = 0;
+      
+      records.forEach(record => {
+        const amount = parseFloat(record.amount) || 0;
+        if (isToday(record.date)) daily += amount;
+        if (isThisWeek(record.date)) weekly += amount;
+        if (isThisMonth(record.date)) monthly += amount;
+      });
+
+      document.getElementById('daily-total').textContent = formatCurrency(daily, currencySymbol);
+      document.getElementById('weekly-total').textContent = formatCurrency(weekly, currencySymbol);
+      document.getElementById('monthly-total').textContent = formatCurrency(monthly, currencySymbol);
+    }
+
+    function filterRecords(records, filter) {
+      switch (filter) {
+        case 'today': return records.filter(r => isToday(r.date));
+        case 'week': return records.filter(r => isThisWeek(r.date));
+        case 'month': return records.filter(r => isThisMonth(r.date));
+        default: return records;
+      }
+    }
+
+    function renderIncomeList(records, currencySymbol) {
+      const listEl = document.getElementById('income-list');
+      const filtered = filterRecords(records, currentFilter);
+      const countEl = document.getElementById('record-count');
+      
+      countEl.textContent = `(${filtered.length} รายการ)`;
+
+      if (filtered.length === 0) {
+        listEl.innerHTML = `
+          <div class="p-8 text-center text-slate-500">
+            <span class="text-4xl block mb-2">📭</span>
+            ยังไม่มีรายการรายได้
+          </div>
+        `;
+        return;
+      }
+
+      // Sort by date descending
+      const sorted = [...filtered].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      const existingItems = new Map(
+        [...listEl.querySelectorAll('.income-item')].map(el => [el.dataset.id, el])
+      );
+
+      const fragment = document.createDocumentFragment();
+      
+      sorted.forEach(record => {
+        const icon = categoryIcons[record.category] || '📌';
+        const catName = categoryNames[record.category] || 'อื่นๆ';
         
-        /* Dark Mode Styles */
-        body.dark-mode {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            color: #e2e8f0;
+        if (existingItems.has(record.__backendId)) {
+          const el = existingItems.get(record.__backendId);
+          el.querySelector('.amount').textContent = formatCurrency(record.amount, currencySymbol);
+          el.querySelector('.description').textContent = record.description;
+          el.querySelector('.category').textContent = `${icon} ${catName}`;
+          el.querySelector('.date').textContent = formatDate(record.date);
+          fragment.appendChild(el);
+          existingItems.delete(record.__backendId);
+        } else {
+          const div = document.createElement('div');
+          div.className = 'income-item income-card p-4 flex items-center justify-between gap-4 hover:bg-slate-700/30 transition-all';
+          div.dataset.id = record.__backendId;
+          div.innerHTML = `
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="amount text-emerald-400 font-bold text-lg">${formatCurrency(record.amount, currencySymbol)}</span>
+                <span class="category text-xs bg-slate-700/50 px-2 py-1 rounded-full text-slate-300">${icon} ${catName}</span>
+              </div>
+              <p class="description text-white truncate">${record.description}</p>
+              <p class="date text-slate-500 text-sm">${formatDate(record.date)}</p>
+            </div>
+            <button class="delete-btn p-2 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all" data-id="${record.__backendId}">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
+          `;
+          fragment.appendChild(div);
         }
+      });
+
+      existingItems.forEach(el => el.remove());
+      listEl.innerHTML = '';
+      listEl.appendChild(fragment);
+
+      // Add delete event listeners
+      listEl.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const id = btn.dataset.id;
+          recordToDelete = records.find(r => r.__backendId === id);
+          if (recordToDelete) {
+            document.getElementById('delete-modal').classList.remove('hidden');
+          }
+        });
+      });
+    }
+
+    // Data handler
+    const dataHandler = {
+      onDataChanged(data) {
+        incomeRecords = data;
+        const config = window.elementSdk?.config || defaultConfig;
+        calculateTotals(data, config.currency_symbol || defaultConfig.currency_symbol);
+        renderIncomeList(data, config.currency_symbol || defaultConfig.currency_symbol);
         
-        .dark-mode .ai-card {
-            background: rgba(30, 41, 59, 0.9);
-            border: 1px solid rgba(71, 85, 105, 0.3);
-            color: #e2e8f0;
+        // Check limit
+        const warningEl = document.getElementById('limit-warning');
+        const submitBtn = document.getElementById('submit-btn');
+        if (data.length >= 999) {
+          warningEl.classList.remove('hidden');
+          submitBtn.disabled = true;
+        } else {
+          warningEl.classList.add('hidden');
+          submitBtn.disabled = false;
         }
-        
-        .dark-mode .gradient-bg {
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+      }
+    };
+
+    // Element SDK setup
+    async function onConfigChange(config) {
+      const title = config.app_title || defaultConfig.app_title;
+      const currencySymbol = config.currency_symbol || defaultConfig.currency_symbol;
+      
+      document.getElementById('app-title').textContent = title;
+      
+      // Recalculate with new currency
+      calculateTotals(incomeRecords, currencySymbol);
+      renderIncomeList(incomeRecords, currencySymbol);
+    }
+
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ['app_title', config.app_title || defaultConfig.app_title],
+        ['currency_symbol', config.currency_symbol || defaultConfig.currency_symbol]
+      ]);
+    }
+
+    // Initialize
+    async function init() {
+      // Set default date to today
+      document.getElementById('date').valueAsDate = new Date();
+
+      // Initialize Element SDK
+      if (window.elementSdk) {
+        window.elementSdk.init({
+          defaultConfig,
+          onConfigChange,
+          mapToCapabilities,
+          mapToEditPanelValues
+        });
+      }
+
+      // Initialize Data SDK
+      if (window.dataSdk) {
+        const result = await window.dataSdk.init(dataHandler);
+        if (!result.isOk) {
+          console.error('Failed to initialize data SDK');
         }
+      }
+
+      // Form submission
+      document.getElementById('income-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
         
-        .dark-mode .ai-input {
-            background: rgba(30, 41, 59, 0.8);
-            border-color: #475569;
-            color: #e2e8f0;
+        if (incomeRecords.length >= 999) {
+          return;
+        }
+
+        const submitBtn = document.getElementById('submit-btn');
+        const originalText = submitBtn.textContent;
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'กำลังบันทึก...';
+
+        const amount = parseFloat(document.getElementById('amount').value);
+        const description = document.getElementById('description').value.trim();
+        const category = document.getElementById('category').value;
+        const date = document.getElementById('date').value;
+
+        if (amount > 0 && description && date) {
+          const result = await window.dataSdk.create({
+            amount,
+            description,
+            category,
+            date
+          });
+
+          if (result.isOk) {
+            document.getElementById('income-form').reset();
+            document.getElementById('date').valueAsDate = new Date();
+          }
+        }
+
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      });
+
+      // Filter tabs
+      document.querySelectorAll('.filter-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          currentFilter = tab.dataset.filter;
+          
+          document.querySelectorAll('.filter-tab').forEach(t => {
+            t.classList.remove('bg-slate-700/50', 'text-white');
+            t.classList.add('text-slate-400');
+          });
+          tab.classList.add('bg-slate-700/50', 'text-white');
+          tab.classList.remove('text-slate-400');
+
+          const config = window.elementSdk?.config || defaultConfig;
+          renderIncomeList(incomeRecords, config.currency_symbol || defaultConfig.currency_symbol);
+        });
+      });
+
+      // Delete modal handlers
+      document.getElementById('cancel-delete').addEventListener('click', () => {
+        document.getElementById('delete-modal').classList.add('hidden');
+        recordToDelete = null;
+      });
+
+      document.getElementById('confirm-delete').addEventListener('click', async () => {
+        if (recordToDelete && window.dataSdk) {
+          const confirmBtn = document.getElementById('confirm-delete');
+          confirmBtn.disabled = true;
+          confirmBtn.textContent = 'กำลังลบ...';
+
+          const result = await window.dataSdk.delete(recordToDelete);
+          
+          confirmBtn.disabled = false;
+          confirmBtn.textContent = 'ลบ';
+          document.getElementById('delete-modal').classList.add('hidden');
+          recordToDelete = null;
+        }
+      });
+
+      // Close modal on backdrop click
+      document.getElementById('delete-modal').addEventListener('click', (e) => {
+        if (e.target.id === 'delete-modal') {
+          document.getElementById('delete-modal').classList.add('hidden');
+          recordToDelete = null;
+        }
+      });
+    }
+
+    init();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c835be8f637731f',t:'MTc3MDEzNjcxMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>            color: #e2e8f0;
         }
         
         .dark-mode .ai-input:focus {
